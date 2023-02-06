@@ -22,5 +22,25 @@ function U.execute_shell(command)
     end
 end
 
+
+local is_unix = package.config:sub(1, 1) == '/'
+local path_separator = is_unix and '/' or '\\'
+
+
+--- Join paths with correct platform-dependent separator.
+---@param ... string Paths to join.
+---@return string path Joined path.
+function U.path_join(...)
+    local paths = {}
+    for _, p in ipairs({...}) do
+        if (p:sub(-1) == path_separator) then
+            p = p:sub(1, -2)
+        end
+        table.insert(paths, p)
+    end
+    return table.concat(paths, path_separator)
+end
+
+
 return U
 

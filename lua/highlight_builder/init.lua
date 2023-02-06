@@ -1,4 +1,5 @@
 local utils_color = require('highlight_builder.utils.utils_color')
+local utils_env = require('highlight_builder.utils.utils_env')
 
 --- Container for functions
 local H = {}
@@ -58,6 +59,24 @@ local H = {}
 ---@return HighlightFull highlight Both GUI and CTerm highlight.
 function H.gui_to_cterm(gui)
     return {}
+end
+
+function H.get_colors(regenerate)
+    -- TODO I can't run my color script inside of neovim because it doesn't support
+    -- ANSI escape sequence I'm using.
+    -- So for now it is hardcoded to open a new terminal
+    -- Potentially I want to get the terminal name and open a new instance of the
+    -- current terminal, or try to work around this ANSI limitation.
+
+    local colors_status, _ = require('highlight_builder.colors')
+    if not colors_status or regenerate then
+        local path_root = utils_env.path_join(utils_env.script_path(), '..', '..')
+        local path_script = utils_env.path_join(path_root, 'py', 'get_colors.py')
+        local path_colors = utils_env.path_join(path_root, 'lua', 'highlight_builder', 'colors.lua')
+        vim.cmd('!alacritty -e ' .. path_script .. ' ' .. path_colors)
+    end
+
+    return require('highlight_builder.colors')
 end
 
 
