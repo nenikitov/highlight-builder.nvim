@@ -104,20 +104,23 @@ end
 --- Approximate a color using a color from a palette.
 ---@param color string HEX value of color to approximate.
 ---@param palette string[] HEX values of available colors.
+---@return integer index Index of the closest color from the palette.
 ---@return string closest HEX value of the closest color from the palettte.
 function U.find_closest_color(color, palette)
     local closest
     local difference
+    local index
 
-    for _, c in ipairs(palette) do
+    for i, c in ipairs(palette) do
         local d = color_difference(color, c)
         if difference == nil or d < difference then
             closest = c
             difference = d
+            index = i
         end
     end
 
-    return closest
+    return index, closest
 end
 
 

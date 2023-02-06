@@ -75,7 +75,7 @@ local H = {}
 --#endregion
 
 
---- Generate and append CTerm highlight properties to GUI only highlight.
+--- Generate and append CTerm highlight properties close to GUI ones.
 ---@param gui HighlightGUI Only GUI highlights.
 ---@return HighlightFull highlight Both GUI and CTerm highlight.
 function H.gui_to_cterm(gui)
@@ -83,7 +83,7 @@ function H.gui_to_cterm(gui)
 end
 
 --- Get all the colors that the terminal supports.
----@param regenerate boolean Whether to regenerate the color cache.
+---@param regenerate boolean Whether to get all the colors from scratch instead of using the cache (slow).
 ---@return ColorTable colors Colors that the terminal supports.
 function H.get_colors(regenerate)
     -- TODO I can't run my color script inside of neovim because it doesn't support
@@ -107,6 +107,10 @@ end
 
 H.mix_colors = utils_color.mix_colors
 
+--- Get the closest color from the 256 color palette the terminal supports.
+---@param color string HEX value of the color ("#RGB" or "#RRGGBB" format).
+---@return integer index Index of the closest color from the palette.
+---@return string closest HEX value of the closest color from the palettte.
 function H.find_closest_color(color)
     return utils_color.find_closest_color(color, H.get_colors(false).indexed)
 end
