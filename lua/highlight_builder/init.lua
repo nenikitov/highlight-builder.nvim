@@ -51,6 +51,27 @@ local H = {}
 ---@field reverse boolean Reverse background and foreground colors.
 ---@field italic boolean Italicize.
 
+
+---@class ColorTablePrimary Most basic colors from the color scheme.
+---@field background string Background.
+---@field foreground string Text color.
+
+---@class ColorTableColors A colored block of colors.
+---@field black string Black.
+---@field red string Red.
+---@field green string Green.
+---@field yellow string Yellow.
+---@field blue string Blue.
+---@field magenta string Magenta.
+---@field cyan string Cyan.
+---@field White string White.
+
+---@class ColorTable Colors that the terminal suppors.
+---@field primary ColorTablePrimary Most basic colors from the colorscheme.
+---@field normal ColorTableColors 8 dim colors.
+---@field bright ColorTableColors 8 bright colors.
+---@field indexed string[] 256 other colors.
+
 --#endregion
 
 
@@ -61,6 +82,9 @@ function H.gui_to_cterm(gui)
     return {}
 end
 
+--- Get all the colors that the terminal supports.
+---@param regenerate boolean Whether to regenerate the color cache.
+---@return ColorTable colors Colors that the terminal supports.
 function H.get_colors(regenerate)
     -- TODO I can't run my color script inside of neovim because it doesn't support
     -- ANSI escape sequence I'm using.
@@ -76,11 +100,16 @@ function H.get_colors(regenerate)
         vim.cmd('!alacritty -e ' .. path_script .. ' ' .. path_colors)
     end
 
-    return require('highlight_builder.colors')
+    local colors = require('highlight_builder.colors')
+    return colors
 end
 
 
 H.mix_colors = utils_color.mix_colors
+
+function H.find_closest_color(color)
+    return utils_color.find_closest_color(color, H.get_colors(false).indexed)
+end
 
 
 return H
