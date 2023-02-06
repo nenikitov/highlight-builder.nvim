@@ -3,10 +3,11 @@
 # The following is tweaked code from
 # https://xyne.dev/projects/python3-colorsysplus/src/
 
-from sys import stdout, stdin
+from sys import stdout, stdin, argv
 import re
 import select
 import termios
+import typing as t
 
 class ConfiguredTerminal():
     def __init__(self) -> None:
@@ -115,23 +116,63 @@ COLORS = [
     'white'
 ]
 
-QUERIES = [
-    ColorQuery('primary.background', 11),
-    ColorQuery('primary.foreground', 10),
-    *[ ColorQuery(f'normal.{c}', [4, i]) for i, c in enumerate(COLORS) ],
-    *[ ColorQuery(f'bright.{c}', [4, i + 8]) for i, c in enumerate(COLORS) ],
-    *[ ColorQuery(f'indexed.{i}', [4, i]) for i in range(0, 256) ],
-]
+QUERIES = {
+    'primary': {
+        'background': 11,
+        'foreground': 10
+    },
+    'normal': {
+        c: [4, i] for i, c in enumerate(COLORS)
+    },
+    'bright': {
+        c: [4, i + 8] for i, c in enumerate(COLORS)
+    },
+    'indexed': [ [4, i] for i in range(0, 256) ]
+}
+
+def is_query(query):
+    return (
+        isinstance(query, int)
+        or (isinstance(query, list) and all(isinstance(e, int) for e in query))
+    )
+
 
 if __name__ == '__main__':
-    with ConfiguredTerminal() as poll:
+    if len(argv) != 2:
+        exit('Specify a path to a file where to output colors')
+    with ConfiguredTerminal() as poll, open(argv[1], 'w') as file:
+        def write_colors(queries: dict | list | int | list[int], level: int):
+            if is_query(queries):
+                # Is a queriable color
+                rgb = query_color(
+                    t.cast(int | list[int], queries),
+                    poll
+                ) or 'nil'
+                file.write(f"'{rgb}'")
+            else:
+                # Is a list or dict
+                indent = 4 * (level + 1)
+                file.write('{\n')
+                if isinstance(queries, dict):
+                    # Dict where k and v pairs should be joined by =
+                    for i, (k, v) in enumerate(queries.items()):
+                        file.write(' ' * indent + f'{k} = ')
+                        write_colors(v, level + 1)
+                        if i != len(queries) - 1:
+                            file.write(',\n')
+                elif isinstance(queries, list):
+                    # Simple list
+                    for i, v in enumerate(queries):
+                        file.write(' ' * indent)
+                        write_colors(v, level + 1)
+                        if i != len(queries) - 1:
+                            file.write(',\n')
+                file.write('\n' + ' ' * (indent - 4) + '}')
+
         try:
-            for q in QUERIES:
-                rgb = query_color(q.query, poll)
-                if rgb:
-                    print(f'{q.name} - {rgb}')
-                else:
-                    break
+            file.write('return ')
+            write_colors(QUERIES, 0)
+            file.write('\n')
         except KeyboardInterrupt:
             pass
 
