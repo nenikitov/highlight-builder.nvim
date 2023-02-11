@@ -120,7 +120,7 @@ function U.find_closest_color(color, palette)
         end
     end
 
-    return index, closest
+    return index - 1, closest
 end
 
 

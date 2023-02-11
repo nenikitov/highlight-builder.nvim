@@ -34,6 +34,11 @@ local H = {}
 ---@field reverse boolean Reverse background and foreground colors.
 ---@field italic boolean Italicize.
 
+---@class HighlightTerm Highlight properties available to terminals in truecolor mode.
+---@field ctermfg CTermColor Term text color.
+---@field ctermbg CTermColor Term background color.
+---@field cterm HighlightCTerm Font modifiers.
+
 ---@class HighlightFull All highlight properties available.
 ---@field ctermfg CTermColor Terminal text color.
 ---@field ctermbg CTermColor Terminal background color.
@@ -75,15 +80,62 @@ local H = {}
 --#endregion
 
 
---- Generate and append CTerm highlight properties close to GUI ones.
+--- Generate CTerm highlight properties close to GUI ones.
 ---@param gui HighlightGUI Only GUI highlights.
----@return HighlightFull highlight Both GUI and CTerm highlight.
+---@return HighlightTerm highlight Approximated CTerm highlight.
 function H.gui_to_cterm(gui)
-    return {}
+    ---@type HighlightTerm
+    local result = {}
+    if gui.fg then
+        result.ctermfg, _ = H.find_closest_color(gui.fg)
+    end
+    if gui.bg then
+        result.ctermbg, _ = H.find_closest_color(gui.bg)
+    end
+    result.cterm = {
+        bold = gui.bold,
+        italic = gui.italic,
+        reverse = gui.reverse,
+        undercurl = gui.undercurl,
+        underline = gui.underline,
+        underdashed = gui.underdashed,
+        underdotted = gui.underdotted,
+        underdouble = gui.underdouble,
+        strikethrough = gui.strikethrough
+    }
+    return result
+end
+
+
+--- Generate GUI highlight properties close to CTerm ones.
+---@param cterm HighlightTerm Only CTerm highlights.
+---@return HighlightGUI highlight Approximated GUI highlight.
+function H.cterm_to_gui(cterm)
+    local colors = H.get_colors()
+    ---@type HighlightGUI
+    local result = {}
+    if cterm.ctermfg and type(cterm.ctermfg) == 'number' then
+        result.fg = colors.indexed[cterm.ctermfg + 1]
+    end
+    if cterm.ctermbg and type(cterm.ctermbg) == 'number' then
+        result.bg, _ = colors.indexed[cterm.ctermbg + 1]
+    end
+    if cterm.cterm then
+        result.bold = cterm.cterm.bold
+        result.italic = cterm.cterm.italic
+        result.reverse = cterm.cterm.reverse
+        result.undercurl = cterm.cterm.undercurl
+        result.underline = cterm.cterm.underline
+        result.underdashed = cterm.cterm.underdashed
+        result.underdotted = cterm.cterm.underdotted
+        result.underdouble = cterm.cterm.underdouble
+        result.strikethrough = cterm.cterm.strikethrough
+    end
+    return result
 end
 
 --- Get all the colors that the terminal supports.
----@param regenerate boolean Whether to get all the colors from scratch instead of using the cache (slow).
+---@param regenerate boolean | nil Whether to get all the colors from scratch instead of using the cache (slow).
 ---@return ColorTable colors Colors that the terminal supports.
 function H.get_colors(regenerate)
     -- TODO I can't run my color script inside of neovim because it doesn't support
