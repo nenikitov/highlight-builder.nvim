@@ -86,10 +86,10 @@ local H = {}
 function H.gui_to_cterm(gui)
     ---@type HighlightTerm
     local result = {}
-    if gui.fg then
+    if gui.fg ~= nil then
         result.ctermfg, _ = H.find_closest_color(gui.fg)
     end
-    if gui.bg then
+    if gui.bg ~= nil then
         result.ctermbg, _ = H.find_closest_color(gui.bg)
     end
     result.cterm = {
@@ -114,13 +114,13 @@ function H.cterm_to_gui(cterm)
     local colors = H.get_colors()
     ---@type HighlightGUI
     local result = {}
-    if cterm.ctermfg and type(cterm.ctermfg) == 'number' then
+    if cterm.ctermfg ~= nil and type(cterm.ctermfg) == 'number' then
         result.fg = colors.indexed[cterm.ctermfg + 1]
     end
-    if cterm.ctermbg and type(cterm.ctermbg) == 'number' then
+    if cterm.ctermbg ~= nil and type(cterm.ctermbg) == 'number' then
         result.bg, _ = colors.indexed[cterm.ctermbg + 1]
     end
-    if cterm.cterm then
+    if cterm.cterm ~= nil then
         result.bold = cterm.cterm.bold
         result.italic = cterm.cterm.italic
         result.reverse = cterm.cterm.reverse
