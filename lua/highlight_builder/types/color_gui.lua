@@ -1,17 +1,17 @@
----@class Color Color with RGB components which can be manipulated.
----@field r integer Red component of the color (capped between `0` - `255`).
----@field g integer Green component of the color (capped between `0` - `255`).
----@field b integer Blue component of the color (capped between `0` - `255`).
-local Color = {}
-Color.__index = Color
+---@class ColorGui Color with RGB components which can be manipulated.
+---@field private r integer Red component of the color (capped between `0` - `255`).
+---@field private g integer Green component of the color (capped between `0` - `255`).
+---@field private b integer Blue component of the color (capped between `0` - `255`).
+local ColorGui = {}
+ColorGui.__index = ColorGui
 
 --- Create a new color with specified RGB values.
 ---@param r integer Red component (`0` - `255`).
 ---@param g integer Green component (`0` - `255`).
 ---@param b integer Blue component (`0` - `255`).
----@return Color color Constructed color
-function Color.new_with_rgb(r, g, b)
-    local self = setmetatable({}, Color)
+---@return ColorGui color Constructed color
+function ColorGui.new_with_rgb(r, g, b)
+    local self = setmetatable({}, ColorGui)
     self.r = math.max(0, math.min(255, r))
     self.g = math.max(0, math.min(255, g))
     self.b = math.max(0, math.min(255, b))
@@ -22,8 +22,8 @@ end
 ---@param h integer Hue component (`0` - `360`).
 ---@param s integer Saturation component (`0` - `100`).
 ---@param v integer Value component (`0` - `100`).
----@return Color color Constructed color
-function Color.new_with_hsv(h, s, v)
+---@return ColorGui color Constructed color
+function ColorGui.new_with_hsv(h, s, v)
     h = h / 360
     s = s / 100
     v = v / 100
@@ -55,7 +55,7 @@ function Color.new_with_hsv(h, s, v)
         end
     end
 
-    return Color.new_with_rgb(
+    return ColorGui.new_with_rgb(
         math.floor(r * 255),
         math.floor(g * 255),
         math.floor(b * 255)
@@ -63,9 +63,9 @@ function Color.new_with_hsv(h, s, v)
 end
 
 --- Compute the [redmean](https://en.wikipedia.org/wiki/Color_difference#sRGB) distance between the colors.
----@param other Color Other color to compute the distance between.
+---@param other ColorGui Other color to compute the distance between.
 ---@return number distance Computed distance.
-function Color:distance_squared(other)
+function ColorGui:distance_squared(other)
     local r = 0.5 + (self.r + other.r)
     local delta_r_squared = (self.r - other.r) * (self.r - other.r)
     local delta_g_squared = (self.g - other.g) * (self.g - other.g)
@@ -78,63 +78,63 @@ function Color:distance_squared(other)
 end
 
 --- Create a color that is in between 2 colors.
----@param other Color Other color to blend with.
+---@param other ColorGui Other color to blend with.
 ---@param factor number Blending factor, how close the color should be to the `other` color (`0` - `1`).
----@return Color blended Blended color.
-function Color:blend(other, factor)
+---@return ColorGui blended Blended color.
+function ColorGui:blend(other, factor)
     local r = self.r + (other.r - self.r) * factor
     local g = self.g + (other.g - self.g) * factor
     local b = self.b + (other.b - self.b) * factor
-    return Color.new_with_rgb(r, g, b)
+    return ColorGui.new_with_rgb(r, g, b)
 end
 
 --- Darken the color, bringing it closer to black.
 ---@param factor number Factor to darken by, how close the color should be to black (`0` - `1`).
----@return Color darkened Darkened color.
-function Color:darken(factor)
-    return self:blend(Color.new_with_rgb(0, 0, 0), factor)
+---@return ColorGui darkened Darkened color.
+function ColorGui:darken(factor)
+    return self:blend(ColorGui.new_with_rgb(0, 0, 0), factor)
 end
 
 --- Lighten the color, bringing it closer to white.
 ---@param factor number Factor to lighten by, how close the color should be to white (`0` - `1`).
----@return Color lightened Lightened color.
-function Color:lighten(factor)
-    return self:blend(Color.new_with_rgb(255, 255, 255), factor)
+---@return ColorGui lightened Lightened color.
+function ColorGui:lighten(factor)
+    return self:blend(ColorGui.new_with_rgb(255, 255, 255), factor)
 end
 
 --- Shift the hue of the color.
 ---@param amount number Amount to shift the hue by in degrees (`-358` - `360`).
----@return Color hue_rotated Hue rotated color.
-function Color:hue_rotate(amount)
+---@return ColorGui hue_rotated Hue rotated color.
+function ColorGui:hue_rotate(amount)
     local h, s, v = self:to_hsv()
     h = (h + amount) % 360
     if h < 0 then
         h = h + 360
     end
-    return Color.new_with_hsv(h, s, v)
+    return ColorGui.new_with_hsv(h, s, v)
 end
 
 --- Saturate the color.
 ---@param amount number Amount to saturate by in percent (`-100` - `100`).
----@return Color saturated Saturated color.
-function Color:saturate(amount)
+---@return ColorGui saturated Saturated color.
+function ColorGui:saturate(amount)
     local h, s, v = self:to_hsv()
     s = s + amount
-    return Color.new_with_hsv(h, s, v)
+    return ColorGui.new_with_hsv(h, s, v)
 end
 
 --- Brighten (modify the value) the color.
 ---@param amount number Amount to brighten by in percent (`-100` - `100`).
----@return Color brightened Brightened color.
-function Color:brighten(amount)
+---@return ColorGui brightened Brightened color.
+function ColorGui:brighten(amount)
     local h, s, v = self:to_hsv()
     v = v + amount
-    return Color.new_with_hsv(h, s, v)
+    return ColorGui.new_with_hsv(h, s, v)
 end
 
 --- Convert the color to HEX.
 ---@return string hex HEX representation (`#000000`).
-function Color:to_hex()
+function ColorGui:to_hex()
     return string.format('#%02X%02X%02X', self.r, self.g, self.b)
 end
 
@@ -142,7 +142,7 @@ end
 ---@return number hue Hue component (`0` - `360`).
 ---@return number saturation Saturation component (`0` - `100`).
 ---@return number value Value component (`0` - `100`).
-function Color:to_hsv()
+function ColorGui:to_hsv()
     local r = self.r / 255
     local g = self.g / 255
     local b = self.b / 255
@@ -178,8 +178,8 @@ end
 ---@return number red Red component (`0` - `255`).
 ---@return number green Green component (`0` - `255`).
 ---@return number blue Blue component (`0` - `255`).
-function Color:to_rgb()
+function ColorGui:to_rgb()
     return self.r, self.g, self.b
 end
 
-return Color
+return ColorGui
