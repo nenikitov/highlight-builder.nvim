@@ -1,21 +1,19 @@
 ---@meta
 
 ---@alias ColorTerm
----| 'Black'
----| 'DarkBlue'
----| 'DarkGreen'
----| 'DarkCyan'
----| 'DarkRed'
----| 'DarkMagenta'
----| 'DarkYellow'
----| 'LightGray'
----| 'DarkGray'
----| 'Blue'
----| 'Green'
----| 'Cyan'
----| 'Red'
----| 'Magenta'
----| 'Yellow'
----| 'White'
-
-
+---| 0 Black
+---| 1 Dark blue
+---| 2 Dark green
+---| 3 Dark cyan
+---| 4 Dark red
+---| 5 Dark magenta
+---| 6 Dark yellow
+---| 7 Light gray
+---| 8 Dark gray
+---| 9 Blue
+---| 10 Green
+---| 11 Cyan
+---| 12 Red
+---| 13 Magenta
+---| 14 Yellow
+---| 15 White

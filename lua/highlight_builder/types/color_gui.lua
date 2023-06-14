@@ -9,7 +9,7 @@ ColorGui.__index = ColorGui
 ---@param r integer Red component (`0` - `255`).
 ---@param g integer Green component (`0` - `255`).
 ---@param b integer Blue component (`0` - `255`).
----@return ColorGui color Constructed color
+---@return ColorGui color Constructed color.
 function ColorGui.new_with_rgb(r, g, b)
     local self = setmetatable({}, ColorGui)
     self.r = math.max(0, math.min(255, r))
@@ -22,7 +22,7 @@ end
 ---@param h integer Hue component (`0` - `360`).
 ---@param s integer Saturation component (`0` - `100`).
 ---@param v integer Value component (`0` - `100`).
----@return ColorGui color Constructed color
+---@return ColorGui color Constructed color.
 function ColorGui.new_with_hsv(h, s, v)
     h = h / 360
     s = s / 100
@@ -60,6 +60,22 @@ function ColorGui.new_with_hsv(h, s, v)
         math.floor(g * 255),
         math.floor(b * 255)
     )
+end
+
+--- Create a new color with specified HSV values.
+---@param hex string HEX representation of the color (`#000` or `#000000`).
+---@return ColorGui color Constructed color.
+function ColorGui.new_with_hex(hex)
+    hex = hex:gsub('#', '')
+    if #hex == 3 then
+        hex = hex:gsub("(%x)(%x)(%x)", "%1%1%2%2%3%3")
+    end
+
+    local r = tonumber(hex:sub(1, 2), 16)
+    local g = tonumber(hex:sub(3, 4), 16)
+    local b = tonumber(hex:sub(5, 6), 16)
+
+    return ColorGui.new_with_rgb(r, g, b)
 end
 
 --- Compute the [redmean](https://en.wikipedia.org/wiki/Color_difference#sRGB) distance between the colors.
