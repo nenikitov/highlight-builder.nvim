@@ -47,6 +47,6 @@ jobs:
             -
                 name: Run tests
                 run:
-                    ./test.sh "lua/"
+                    ./test.sh
 
 
