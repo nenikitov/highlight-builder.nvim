@@ -37,10 +37,15 @@ jobs:
             -
                 name: Install Neovim
                 run: |
+                    # Download
                     NVIM_URL=https://github.com/neovim/neovim/releases/download
                     wget "${NVIM_URL}/${NVIM_VERSION}/nvim-linux64.tar.gz"
                     tar -xf "nvim-linux64.tar.gz"
-                    alias nvim="./nvim-linux64/bin/nvim"
+                    # Install
+                    sudo cp "./nvim-linux64/bin/nvim" "/bin/"
+                    # Clean up
+                    rm -rf "./nvim-linux64.tar.gz"
+                    rm -rf "./nvim-linux64"
 
             -
                 name: Run tests
