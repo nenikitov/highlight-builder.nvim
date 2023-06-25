@@ -11,4 +11,3 @@
 ---@field inverse boolean? Inverse background and foreground colors.
 ---@field italic boolean? Italicize.
 ---@field nocombine boolean? Whether to fully overwrite `TextStyle` properties or to add them.
-

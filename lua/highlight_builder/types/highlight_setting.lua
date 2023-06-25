@@ -46,14 +46,14 @@ function HighlightSetting:complete(palette)
         r.gui = {
             fg = r.term.ctermfg and palette[r.term.ctermfg + 1] or nil,
             bg = r.term.ctermbg and palette[r.term.ctermbg + 1] or nil,
-            gui = r.term.style
+            gui = r.term.style,
         }
     elseif r.gui and not r.term then
         r.gui.style = r.gui.style or {}
         r.term = {
             ctermfg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette) - 1) or nil,
             ctermbg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette) - 1) or nil,
-            cterm = r.gui.style
+            cterm = r.gui.style,
         }
     end
     return r
@@ -66,7 +66,7 @@ function HighlightSetting:compile(palette)
     local completed = self:complete(palette)
     if completed.link ~= nil then
         return {
-            link = completed.link
+            link = completed.link,
         }
     end
 
@@ -74,10 +74,10 @@ function HighlightSetting:compile(palette)
     local result = {
         fg = completed.gui.fg and completed.gui.fg:to_hex() or nil,
         bg = completed.gui.bg and completed.gui.bg:to_hex() or nil,
-        sp = completed.gui.sp and  completed.gui.sp:to_hex() or nil,
+        sp = completed.gui.sp and completed.gui.sp:to_hex() or nil,
         ctermfg = completed.term.ctermfg,
         ctermbg = completed.term.ctermbg,
-        cterm = completed.term.style
+        cterm = completed.term.style,
     }
     for k, v in completed.gui.style do
         result[k] = v
@@ -85,4 +85,3 @@ function HighlightSetting:compile(palette)
 
     return result
 end
-

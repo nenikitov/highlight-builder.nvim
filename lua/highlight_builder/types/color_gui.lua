@@ -41,25 +41,21 @@ function ColorGui.new_with_hsv(h, s, v)
         local t = v * (1 - (1 - offset) * s)
 
         if segment % 6 == 0 then
-          r, g, b = v, t, p
+            r, g, b = v, t, p
         elseif segment % 6 == 1 then
-          r, g, b = q, v, p
+            r, g, b = q, v, p
         elseif segment % 6 == 2 then
-          r, g, b = p, v, t
+            r, g, b = p, v, t
         elseif segment % 6 == 3 then
-          r, g, b = p, q, v
+            r, g, b = p, q, v
         elseif segment % 6 == 4 then
-          r, g, b = t, p, v
+            r, g, b = t, p, v
         elseif segment % 6 == 5 then
-          r, g, b = v, p, q
+            r, g, b = v, p, q
         end
     end
 
-    return ColorGui.new_with_rgb(
-        math.floor(r * 255),
-        math.floor(g * 255),
-        math.floor(b * 255)
-    )
+    return ColorGui.new_with_rgb(math.floor(r * 255), math.floor(g * 255), math.floor(b * 255))
 end
 
 --- Create a new color with specified HSV values.
@@ -68,7 +64,7 @@ end
 function ColorGui.new_with_hex(hex)
     hex = hex:gsub('#', '')
     if #hex == 3 then
-        hex = hex:gsub("(%x)(%x)(%x)", "%1%1%2%2%3%3")
+        hex = hex:gsub('(%x)(%x)(%x)', '%1%1%2%2%3%3')
     end
 
     local r = tonumber(hex:sub(1, 2), 16)
@@ -86,8 +82,7 @@ function ColorGui:distance_squared(other)
     local delta_r_squared = (self.r - other.r) * (self.r - other.r)
     local delta_g_squared = (self.g - other.g) * (self.g - other.g)
     local delta_b_squared = (self.b - other.b) * (self.b - other.b)
-    return
-        (2 + r / 256)
+    return (2 + r / 256)
         + delta_r_squared
         + 4 * delta_g_squared
         + (2 + (255 - r) / 256) * delta_b_squared
@@ -169,17 +164,17 @@ function ColorGui:to_hsv()
     local c_min = math.min(r, g, b)
     local c_diff = c_max - c_min
 
-    if (c_max == c_min) then
+    if c_max == c_min then
         h = 0
-    elseif (c_max == r) then
+    elseif c_max == r then
         h = (60 * ((g - b) / c_diff) + 360) % 360
-    elseif (c_max == g) then
-        h = (60 * ((b - r) / c_diff) +  120) % 360
+    elseif c_max == g then
+        h = (60 * ((b - r) / c_diff) + 120) % 360
     else
-        h = (60 * ((r - g) / c_diff) +  240) % 360
+        h = (60 * ((r - g) / c_diff) + 240) % 360
     end
 
-    if (c_max == 0) then
+    if c_max == 0 then
         s = 0
     else
         s = (c_diff / c_max) * 100

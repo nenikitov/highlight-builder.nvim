@@ -280,5 +280,5 @@ return {
         '#DADADA',
         '#E4E4E4',
         '#EEEEEE',
-    }
+    },
 }

@@ -7,33 +7,41 @@ on:
             - main
 
 jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v3
+            -
+                name: StyLua
+                uses: JohnnyMorganz/stylua-action@v3
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: latest
+                    args: --check .
+
     test:
         runs-on: ubuntu-latest
-
         strategy:
             matrix:
                 nvim_branch:
                     - 'stable'
                     - 'nightly'
-
         env:
             NVIM_VERSION: ${{ matrix.nvim_branch }}
-
         steps:
             -
                 name: Checkout
                 uses: actions/checkout@v3
-
             -
                 name: Install Lua
                 uses: leafo/gh-actions-lua@v10
                 with:
                     luaVersion: "5.1.5"
-
             -
                 name: Install LuaRocks
                 uses: leafo/gh-actions-luarocks@v4
-
             -
                 name: Install Neovim
                 run: |
@@ -46,10 +54,7 @@ jobs:
                     # Clean up
                     rm -rf "./nvim-linux64.tar.gz"
                     rm -rf "./nvim-linux64"
-
             -
                 name: Run tests
                 run:
                     ./test.sh
-
-
