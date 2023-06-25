@@ -1,0 +1,52 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                nvim_branch:
+                    - 'stable'
+                    - 'nightly'
+
+        env:
+            NVIM_VERSION: ${{ matrix.nvim_branch }}
+
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v3
+
+            -
+                name: Install Lua
+                uses: leafo/gh-actions-lua@v10
+                with:
+                    luaVersion: "5.1.5"
+
+            -
+                name: Install LuaRocks
+                uses: leafo/gh-actions-luarocks@v4
+
+            -
+                name: Install Neovim
+                run: |
+                    NVIM_URL=https://github.com/neovim/neovim/releases/download
+                    wget "${NVIM_URL}/${NVIM_VERSION}/nvim-linux64.tar.gz"
+                    tar -xf "nvim-linux64.tar.gz"
+                    alias nvim="./nvim-linux64/bin/nvim"
+
+            -
+                name: Run tests
+                run:
+                    ./test.sh "lua/"
+
+
