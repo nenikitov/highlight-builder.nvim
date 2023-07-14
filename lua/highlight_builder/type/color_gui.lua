@@ -12,9 +12,9 @@ ColorGui.__index = ColorGui
 ---@return ColorGui color Constructed color.
 function ColorGui.new_with_rgb(r, g, b)
     local self = setmetatable({}, ColorGui)
-    self.r = math.max(0, math.min(255, r))
-    self.g = math.max(0, math.min(255, g))
-    self.b = math.max(0, math.min(255, b))
+    self.r = math.max(0, math.min(255, math.floor(r)))
+    self.g = math.max(0, math.min(255, math.floor(g)))
+    self.b = math.max(0, math.min(255, math.floor(b)))
     return self
 end
 
@@ -24,9 +24,9 @@ end
 ---@param v integer Value component (`0` - `100`).
 ---@return ColorGui color Constructed color.
 function ColorGui.new_with_hsv(h, s, v)
-    h = h / 360
-    s = s / 100
-    v = v / 100
+    h = math.max(0, math.min(1, h / 360))
+    s = math.max(0, math.min(1, s / 100))
+    v = math.max(0, math.min(1, v / 100))
     local r = 0
     local g = 0
     local b = 0
@@ -67,6 +67,8 @@ function ColorGui.new_with_hex(hex)
         hex = hex:gsub('(%x)(%x)(%x)', '%1%1%2%2%3%3')
     end
 
+    assert(#hex == 6, 'Invalid hex color passed (' .. hex .. ')')
+
     local r = tonumber(hex:sub(1, 2), 16)
     local g = tonumber(hex:sub(3, 4), 16)
     local b = tonumber(hex:sub(5, 6), 16)
@@ -74,18 +76,14 @@ function ColorGui.new_with_hex(hex)
     return ColorGui.new_with_rgb(r, g, b)
 end
 
---- Compute the [redmean](https://en.wikipedia.org/wiki/Color_difference#sRGB) distance between the colors.
+--- Compute the distance between the colors.
 ---@param other ColorGui Other color to compute the distance between.
 ---@return number distance Computed distance.
 function ColorGui:distance_squared(other)
-    local r = 0.5 + (self.r + other.r)
-    local delta_r_squared = (self.r - other.r) * (self.r - other.r)
-    local delta_g_squared = (self.g - other.g) * (self.g - other.g)
-    local delta_b_squared = (self.b - other.b) * (self.b - other.b)
-    return (2 + r / 256)
-        + delta_r_squared
-        + 4 * delta_g_squared
-        + (2 + (255 - r) / 256) * delta_b_squared
+    local delta_r = (self.r - other.r)
+    local delta_g = (self.g - other.g)
+    local delta_b = (self.b - other.b)
+    return delta_r * delta_r + delta_g * delta_g + delta_b * delta_b
 end
 
 --- Create a color that is in between 2 colors.
