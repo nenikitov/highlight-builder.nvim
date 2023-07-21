@@ -2,6 +2,8 @@
 
 BUSTED_VERSION="2.1.2-3"
 
+luarocks init
+git restore .gitignore
 luarocks install busted "$BUSTED_VERSION"
 luarocks config --scope project lua_version 5.1
 
