@@ -389,14 +389,13 @@ describe('ColorGui', function()
         end
     end)
 
-
     describe('to_hex', function()
         for _, v in ipairs({
-            { { 30, 215, 28 }, "#1ED71C" },
-            { { 8, 2, 84 }, "#080254" },
-            { { 92, 35, 101 }, "#5C2365" },
-            { { 244, 238, 251 }, "#F4EEFB" },
-            { { 83, 43, 56 }, "#532B38" },
+            { { 30, 215, 28 }, '#1ED71C' },
+            { { 8, 2, 84 }, '#080254' },
+            { { 92, 35, 101 }, '#5C2365' },
+            { { 244, 238, 251 }, '#F4EEFB' },
+            { { 83, 43, 56 }, '#532B38' },
         }) do
             it(
                 'Should correctly convert color rgb('
@@ -512,10 +511,7 @@ describe('ColorGui', function()
                 function()
                     local color = ColorGui.new_with_rgb(v[1][1], v[1][2], v[1][3])
                     local r, g, b = color:to_rgb()
-                    assert.are.same(
-                        { v[1][1], v[1][2], v[1][3] },
-                        { r, g, b }
-                    )
+                    assert.are.same({ v[1][1], v[1][2], v[1][3] }, { r, g, b })
                 end
             )
         end
