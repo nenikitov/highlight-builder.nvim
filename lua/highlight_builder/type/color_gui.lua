@@ -1,3 +1,9 @@
+---@param number number
+---@return number number
+local function round(number)
+    return math.floor(number + 0.5)
+end
+
 ---@class ColorGui Color with RGB components which can be manipulated.
 ---@field private r integer Red component of the color (capped between `0` - `255`).
 ---@field private g integer Green component of the color (capped between `0` - `255`).
@@ -112,7 +118,7 @@ function ColorGui:lighten(factor)
 end
 
 --- Shift the hue of the color.
----@param amount number Amount to shift the hue by in degrees (`-358` - `360`).
+---@param amount number Amount to shift the hue by in degrees (`-360` - `360`).
 ---@return ColorGui hue_rotated Hue rotated color.
 function ColorGui:hue_rotate(amount)
     local h, s, v = self:to_hsv()
@@ -128,8 +134,7 @@ end
 ---@return ColorGui saturated Saturated color.
 function ColorGui:saturate(amount)
     local h, s, v = self:to_hsv()
-    s = s + amount
-    return ColorGui.new_with_hsv(h, s, v)
+    return ColorGui.new_with_hsv(h, s + amount, v)
 end
 
 --- Brighten (modify the value) the color.
@@ -137,8 +142,7 @@ end
 ---@return ColorGui brightened Brightened color.
 function ColorGui:brighten(amount)
     local h, s, v = self:to_hsv()
-    v = v + amount
-    return ColorGui.new_with_hsv(h, s, v)
+    return ColorGui.new_with_hsv(h, s, v + amount)
 end
 
 --- Convert the color to HEX.
@@ -180,7 +184,7 @@ function ColorGui:to_hsv()
 
     local v = c_max * 100
 
-    return h, s, v
+    return round(h), round(s), round(v)
 end
 
 --- Convert the color to RGB components.
