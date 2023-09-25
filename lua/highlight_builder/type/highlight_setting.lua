@@ -1,15 +1,26 @@
 local ColorGui = require('highlight_builder.type.color_gui')
 
----@class HighlightSettingGui Style Highlight properties for GUI interfaces.
----@field fg ColorGui? Foreground color.
----@field bg ColorGui? Background color.
----@field sp ColorGui? Special color (used for underline).
----@field style TextStyle? Text style.
+---@class HighlightSettingGui
+---@field fg ColorGui?
+---@field bg ColorGui?
+---@field sp ColorGui?
+---@field style TextStyle?
 
 ---@class HighlightSettingTerm Highlight properties for terminal interfaces.
 ---@field ctermfg ColorTerm? Foreground color.
 ---@field ctermbg ColorTerm? Background color.
 ---@field style TextStyle? Text style.
+
+---@class HighlightInputGui Style Highlight properties for GUI interfaces.
+---@field fg (ColorGui | string)? Foreground color.
+---@field bg (ColorGui | string)? Background color.
+---@field sp (ColorGui | string)? Special color (used for underline).
+---@field style TextStyle? Text style.
+
+---@class HighlightInput
+---@field gui HighlightInputGui? GUI properties.
+---@field term HighlightSettingTerm? Terminal properties.
+---@field link string? Name of the highlight group to link this one to.
 
 ---@class HighlightSetting Highlight properties for both GUI and terminal interfaces.
 ---@field gui HighlightSettingGui? GUI properties.
@@ -31,24 +42,30 @@ local function find_closest_index_in_palette(color, palette)
             closest_distance = distance
         end
     end
+
+    ---@diagnostic disable-next-line: return-type-mismatch -- It will not be `nil` because there will be at least 1 color in the palette
     return closest_index
 end
 
----@param highlight HighlightSetting
+---@param highlight HighlightInput
 ---@return HighlightSetting
 function HighlightSetting.new(highlight)
     local self = setmetatable(highlight, HighlightSetting)
 
     if self.gui and self.gui.fg and type(self.gui.fg) == 'string' then
-        self.gui.fg = ColorGui.new_with_hex(self.gui.fg)
+        ---@diagnostic disable-next-line: param-type-mismatch -- Type is checked in the if statement
+        self.gui.fg = ColorGui.from_hex(self.gui.fg)
     end
     if self.gui and self.gui.bg and type(self.gui.bg) == 'string' then
-        self.gui.bg = ColorGui.new_with_hex(self.gui.bg)
+        ---@diagnostic disable-next-line: param-type-mismatch -- Type is checked in the if statement
+        self.gui.bg = ColorGui.from_hex(self.gui.bg)
     end
     if self.gui and self.gui.sp and type(self.gui.sp) == 'string' then
-        self.gui.sp = ColorGui.new_with_hex(self.gui.sp)
+        ---@diagnostic disable-next-line: param-type-mismatch -- Type is checked in the if statement
+        self.gui.sp = ColorGui.from_hex(self.gui.sp)
     end
 
+    ---@diagnostic disable-next-line: return-type-mismatch -- Types match
     return self
 end
 

@@ -16,7 +16,7 @@ ColorGui.__index = ColorGui
 ---@param g integer Green component (`0` - `255`).
 ---@param b integer Blue component (`0` - `255`).
 ---@return ColorGui color Constructed color.
-function ColorGui.new_with_rgb(r, g, b)
+function ColorGui.from_rgb(r, g, b)
     local self = setmetatable({}, ColorGui)
     self.r = math.max(0, math.min(255, math.floor(r)))
     self.g = math.max(0, math.min(255, math.floor(g)))
@@ -29,7 +29,7 @@ end
 ---@param s integer Saturation component (`0` - `100`).
 ---@param v integer Value component (`0` - `100`).
 ---@return ColorGui color Constructed color.
-function ColorGui.new_with_hsv(h, s, v)
+function ColorGui.from_hsv(h, s, v)
     h = math.max(0, math.min(1, h / 360))
     s = math.max(0, math.min(1, s / 100))
     v = math.max(0, math.min(1, v / 100))
@@ -61,13 +61,13 @@ function ColorGui.new_with_hsv(h, s, v)
         end
     end
 
-    return ColorGui.new_with_rgb(math.floor(r * 255), math.floor(g * 255), math.floor(b * 255))
+    return ColorGui.from_rgb(math.floor(r * 255), math.floor(g * 255), math.floor(b * 255))
 end
 
 --- Create a new color with specified HSV values.
 ---@param hex string HEX representation of the color (`#000` or `#000000`).
 ---@return ColorGui color Constructed color.
-function ColorGui.new_with_hex(hex)
+function ColorGui.from_hex(hex)
     hex = hex:gsub('#', '')
     if #hex == 3 then
         hex = hex:gsub('(%x)(%x)(%x)', '%1%1%2%2%3%3')
@@ -79,7 +79,7 @@ function ColorGui.new_with_hex(hex)
     local g = tonumber(hex:sub(3, 4), 16)
     local b = tonumber(hex:sub(5, 6), 16)
 
-    return ColorGui.new_with_rgb(r, g, b)
+    return ColorGui.from_rgb(r, g, b)
 end
 
 --- Compute the distance between the colors.
@@ -100,21 +100,21 @@ function ColorGui:blend(other, factor)
     local r = self.r + (other.r - self.r) * factor
     local g = self.g + (other.g - self.g) * factor
     local b = self.b + (other.b - self.b) * factor
-    return ColorGui.new_with_rgb(r, g, b)
+    return ColorGui.from_rgb(r, g, b)
 end
 
 --- Darken the color, bringing it closer to black.
 ---@param factor number Factor to darken by, how close the color should be to black (`0` - `1`).
 ---@return ColorGui darkened Darkened color.
 function ColorGui:darken(factor)
-    return self:blend(ColorGui.new_with_rgb(0, 0, 0), factor)
+    return self:blend(ColorGui.from_rgb(0, 0, 0), factor)
 end
 
 --- Lighten the color, bringing it closer to white.
 ---@param factor number Factor to lighten by, how close the color should be to white (`0` - `1`).
 ---@return ColorGui lightened Lightened color.
 function ColorGui:lighten(factor)
-    return self:blend(ColorGui.new_with_rgb(255, 255, 255), factor)
+    return self:blend(ColorGui.from_rgb(255, 255, 255), factor)
 end
 
 --- Shift the hue of the color.
@@ -126,7 +126,7 @@ function ColorGui:hue_rotate(amount)
     if h < 0 then
         h = h + 360
     end
-    return ColorGui.new_with_hsv(h, s, v)
+    return ColorGui.from_hsv(h, s, v)
 end
 
 --- Saturate the color.
@@ -134,7 +134,7 @@ end
 ---@return ColorGui saturated Saturated color.
 function ColorGui:saturate(amount)
     local h, s, v = self:to_hsv()
-    return ColorGui.new_with_hsv(h, s + amount, v)
+    return ColorGui.from_hsv(h, s + amount, v)
 end
 
 --- Brighten (modify the value) the color.
@@ -142,7 +142,7 @@ end
 ---@return ColorGui brightened Brightened color.
 function ColorGui:brighten(amount)
     local h, s, v = self:to_hsv()
-    return ColorGui.new_with_hsv(h, s, v + amount)
+    return ColorGui.from_hsv(h, s, v + amount)
 end
 
 --- Convert the color to HEX.
