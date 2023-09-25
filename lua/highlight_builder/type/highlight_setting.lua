@@ -1,3 +1,5 @@
+local ColorGui = require('highlight_builder.type.color_gui')
+
 ---@class HighlightSettingGui Style Highlight properties for GUI interfaces.
 ---@field fg ColorGui? Foreground color.
 ---@field bg ColorGui? Background color.
@@ -32,56 +34,74 @@ local function find_closest_index_in_palette(color, palette)
     return closest_index
 end
 
----@private
----@param palette ColorGui[]
+---@param highlight HighlightSetting
 ---@return HighlightSetting
-function HighlightSetting:complete(palette)
-    if self.link then
-        return { link = self.link }
+function HighlightSetting.new(highlight)
+    local self = setmetatable(highlight, HighlightSetting)
+
+    if self.gui and self.gui.fg and type(self.gui.fg) == 'string' then
+        self.gui.fg = ColorGui.new_with_hex(self.gui.fg)
+    end
+    if self.gui and self.gui.bg and type(self.gui.bg) == 'string' then
+        self.gui.bg = ColorGui.new_with_hex(self.gui.bg)
+    end
+    if self.gui and self.gui.sp and type(self.gui.sp) == 'string' then
+        self.gui.sp = ColorGui.new_with_hex(self.gui.sp)
     end
 
-    local r = vim.tbl_deep_extend('keep', self, { term = {}, gui = {} })
-    if r.term and not r.gui then
-        r.term.style = r.term.style or {}
-        r.gui = {
-            fg = r.term.ctermfg and palette[r.term.ctermfg + 1] or nil,
-            bg = r.term.ctermbg and palette[r.term.ctermbg + 1] or nil,
-            gui = r.term.style,
+    return self
+end
+
+---@param palette ColorGui[]
+function HighlightSetting:complete(palette)
+    if self.link then
+        self = { link = self.link }
+    end
+
+    if self.term and not self.gui then
+        self.gui = {}
+        self.term.style = self.term.style or {}
+        self.gui = {
+            fg = self.term.ctermfg and palette[self.term.ctermfg + 1] or nil,
+            bg = self.term.ctermbg and palette[self.term.ctermbg + 1] or nil,
+            style = self.term.style,
         }
-    elseif r.gui and not r.term then
-        r.gui.style = r.gui.style or {}
-        r.term = {
-            ctermfg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette) - 1) or nil,
-            ctermbg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette) - 1) or nil,
-            cterm = r.gui.style,
+    elseif self.gui and not self.term then
+        self.term = {}
+        self.gui.style = self.gui.style or {}
+        self.term = {
+            ctermfg = self.gui.fg and (find_closest_index_in_palette(self.gui.fg, palette) - 1) or nil,
+            ctermbg = self.gui.bg and (find_closest_index_in_palette(self.gui.bg, palette) - 1) or nil,
+            style = self.gui.style,
         }
     end
-    return r
 end
 
 --- Compile highlight settings transforming it into a table that NeoVim can understand.
 ---@param palette ColorGui[] Palette of the terminal.
 ---@return HighlightCompiled compiled Compiled highlight.
 function HighlightSetting:compile(palette)
-    local completed = self:complete(palette)
-    if completed.link ~= nil then
+    self:complete(palette)
+    if self.link ~= nil then
         return {
-            link = completed.link,
+            link = self.link,
         }
     end
 
     ---@type HighlightCompiled
     local result = {
-        fg = completed.gui.fg and completed.gui.fg:to_hex() or nil,
-        bg = completed.gui.bg and completed.gui.bg:to_hex() or nil,
-        sp = completed.gui.sp and completed.gui.sp:to_hex() or nil,
-        ctermfg = completed.term.ctermfg,
-        ctermbg = completed.term.ctermbg,
-        cterm = completed.term.style,
+        fg = self.gui and self.gui.fg and self.gui.fg:to_hex() or nil,
+        bg = self.gui and self.gui.bg and self.gui.bg:to_hex() or nil,
+        sp = self.gui and self.gui.sp and self.gui.sp:to_hex() or nil,
+        ctermfg = self.term and self.term.ctermfg or nil,
+        ctermbg = self.term and self.term.ctermbg or nil,
+        cterm = self.term and self.term.style or nil,
     }
-    for k, v in completed.gui.style do
+    for k, v in pairs(self.gui and self.gui.style or {}) do
         result[k] = v
     end
 
     return result
 end
+
+return HighlightSetting

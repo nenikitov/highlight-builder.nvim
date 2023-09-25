@@ -1,3 +1,5 @@
+---@diagnostic disable: lowercase-global
+
 rockspec_format = '3.0'
 package = 'highlight-builder.nvim'
 version = 'scm-1'
