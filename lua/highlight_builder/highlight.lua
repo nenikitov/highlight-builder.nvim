@@ -76,7 +76,7 @@ local function find_closest_index_in_palette(color, palette)
         end
     end
 
-    ---@diagnostic disable-next-line: return-type-mismatch -- It will not be `nil` because there will be at least 1 color in the palette
+    ---@cast closest_index integer
     return closest_index
 end
 
@@ -86,19 +86,22 @@ function HighlightSetting.new(highlight)
     local self = setmetatable(highlight, HighlightSetting)
 
     if self.gui and self.gui.fg and type(self.gui.fg) == 'string' then
-        ---@diagnostic disable-next-line: param-type-mismatch -- Type is checked in the if statement
-        self.gui.fg = ColorGui.from_hex(self.gui.fg)
+        local color = self.gui.fg
+        ---@cast color string
+        self.gui.fg = ColorGui.from_hex(color)
     end
     if self.gui and self.gui.bg and type(self.gui.bg) == 'string' then
-        ---@diagnostic disable-next-line: param-type-mismatch -- Type is checked in the if statement
-        self.gui.bg = ColorGui.from_hex(self.gui.bg)
+        local color = self.gui.bg
+        ---@cast color string
+        self.gui.bg = ColorGui.from_hex(color)
     end
     if self.gui and self.gui.sp and type(self.gui.sp) == 'string' then
-        ---@diagnostic disable-next-line: param-type-mismatch -- Type is checked in the if statement
-        self.gui.sp = ColorGui.from_hex(self.gui.sp)
+        local color = self.gui.sp
+        ---@cast color string
+        self.gui.sp = ColorGui.from_hex(color)
     end
 
-    ---@diagnostic disable-next-line: return-type-mismatch -- Types match
+    ---@cast self HighlightSetting
     return self
 end
 
@@ -126,7 +129,7 @@ function HighlightSetting:complete(palette)
         }
     end
 
-    ---@diagnostic disable-next-line: param-type-mismatch -- Types match
+    ---@cast r HighlightInput
     return HighlightSetting.new(r)
 end
 

@@ -1,4 +1,4 @@
----@diagnostic disable: undefined-field -- For assertions
+---@diagnostic disable: undefined-field -- For `assert` module
 
 local HighlightSetting = require('highlight_builder.highlight')
 local ColorGui = require('highlight_builder.color')
