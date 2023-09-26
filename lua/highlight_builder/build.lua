@@ -10,10 +10,10 @@ return function(palette, builder)
     local highlights = {}
 
     builder(function(name)
-        highlights[name] = highlights[name]:complete(palette)
+        highlights[name] = highlights[name]
         return highlights[name]
     end, function(name, highlight)
-        highlights[name] = HighlightSetting.new(highlight)
+        highlights[name] = HighlightSetting.new(highlight):complete(palette)
     end)
 
     return vim.tbl_map(
