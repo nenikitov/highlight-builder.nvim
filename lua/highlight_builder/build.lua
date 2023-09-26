@@ -14,7 +14,7 @@ return function(builder, palette)
 
     builder(
         function(name)
-            highlights[name]:complete(paletteColorGui)
+            highlights[name] = highlights[name]:complete(paletteColorGui)
             return highlights[name]
         end,
         function(name, highlight)
@@ -23,7 +23,7 @@ return function(builder, palette)
     )
 
     return vim.tbl_map(
-        ---@param h HighlightSetting
+    ---@param h HighlightSetting
         function(h)
             return h:compile(paletteColorGui)
         end,

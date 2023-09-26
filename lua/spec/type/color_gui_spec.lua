@@ -26,7 +26,7 @@ assert:register(
 )
 
 describe('ColorGui', function()
-    describe('new_wtih_rgb', function()
+    describe('from_rgb', function()
         for _, v in ipairs({
             { 179, 243, 247 },
             { 221, 127, 215 },

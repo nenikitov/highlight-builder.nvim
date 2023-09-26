@@ -70,36 +70,38 @@ function HighlightSetting.new(highlight)
 end
 
 ---@param palette ColorGui[]
+---@return HighlightSetting
 function HighlightSetting:complete(palette)
     if self.link then
-        self = { link = self.link }
+        return { link = self.link }
     end
 
-    if self.term and not self.gui then
-        self.gui = {}
-        self.term.style = self.term.style or {}
-        self.gui = {
-            fg = self.term.ctermfg and palette[self.term.ctermfg + 1] or nil,
-            bg = self.term.ctermbg and palette[self.term.ctermbg + 1] or nil,
-            style = self.term.style,
+    local r =  vim.tbl_deep_extend('force', self, {})
+    if r.term and not r.gui then
+        r.gui = {}
+        r.gui = {
+            fg = r.term.ctermfg and palette[r.term.ctermfg + 1] or nil,
+            bg = r.term.ctermbg and palette[r.term.ctermbg + 1] or nil,
+            style = r.term.style,
         }
-    elseif self.gui and not self.term then
-        self.term = {}
-        self.gui.style = self.gui.style or {}
-        self.term = {
-            ctermfg = self.gui.fg and (find_closest_index_in_palette(self.gui.fg, palette) - 1) or nil,
-            ctermbg = self.gui.bg and (find_closest_index_in_palette(self.gui.bg, palette) - 1) or nil,
-            style = self.gui.style,
+    elseif r.gui and not r.term then
+        r.term = {}
+        r.term = {
+            ctermfg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette) - 1) or nil,
+            ctermbg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette) - 1) or nil,
+            style = r.gui.style,
         }
     end
+
+    return r
 end
 
 --- Compile highlight settings transforming it into a table that NeoVim can understand.
 ---@param palette ColorGui[] Palette of the terminal.
 ---@return HighlightCompiled compiled Compiled highlight.
 function HighlightSetting:compile(palette)
-    self:complete(palette)
-    if self.link ~= nil then
+    local completed = self:complete(palette)
+    if completed.link then
         return {
             link = self.link,
         }
@@ -107,14 +109,14 @@ function HighlightSetting:compile(palette)
 
     ---@type HighlightCompiled
     local result = {
-        fg = self.gui and self.gui.fg and self.gui.fg:to_hex() or nil,
-        bg = self.gui and self.gui.bg and self.gui.bg:to_hex() or nil,
-        sp = self.gui and self.gui.sp and self.gui.sp:to_hex() or nil,
-        ctermfg = self.term and self.term.ctermfg or nil,
-        ctermbg = self.term and self.term.ctermbg or nil,
-        cterm = self.term and self.term.style or nil,
+        fg = completed.gui and completed.gui.fg and completed.gui.fg:to_hex() or nil,
+        bg = completed.gui and completed.gui.bg and completed.gui.bg:to_hex() or nil,
+        sp = completed.gui and completed.gui.sp and completed.gui.sp:to_hex() or nil,
+        ctermfg = completed.term and completed.term.ctermfg or nil,
+        ctermbg = completed.term and completed.term.ctermbg or nil,
+        cterm = completed.term and completed.term.style or nil,
     }
-    for k, v in pairs(self.gui and self.gui.style or {}) do
+    for k, v in pairs(completed.gui and completed.gui.style or {}) do
         result[k] = v
     end
 
