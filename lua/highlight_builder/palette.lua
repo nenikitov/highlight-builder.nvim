@@ -2,5 +2,4 @@
 ---@field indexed ColorGui[]
 ---@field primary { fg: ColorGui, bg: ColorGui }
 
-return {
-}
+return {}

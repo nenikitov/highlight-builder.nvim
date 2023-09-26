@@ -15,117 +15,93 @@ local palette = {
 describe('build', function()
     describe('set', function()
         it('Should generate completed highlights', function()
-            local scheme = build(
-                palette,
-                function(_, set)
-                    set(
-                        'OnlyTerm',
-                        {
-                            term = {
-                                fg = 3
-                            }
-                        }
-                    )
-                    set(
-                        'OnlyGui',
-                        {
-                            gui = {
-                                fg = '#00AB00',
-                                style = {
-                                    bold = true
-                                }
-                            }
-                        }
-                    )
-                    set(
-                        'Nothing',
-                        {}
-                    )
-                    set(
-                        'Both',
-                        {
-                            term = {
-                                fg = 1,
-                                style = {
-                                    bold = true
-                                }
-                            },
-                            gui = {
-                                bg = '#ffffff',
-                                style = {
-                                    underline = true
-                                }
-                            }
-                        }
-                    )
-                    set(
-                        'Link',
-                        {
-                            link = 'Both'
-                        }
-                    )
-                end
-            )
-            assert.are.same(
-                {
-                    OnlyTerm = {
-                        ctermfg = 3,
-                        fg = '#0000FF'
+            local scheme = build(palette, function(_, set)
+                set('OnlyTerm', {
+                    term = {
+                        fg = 3,
                     },
-                    OnlyGui = {
-                        ctermfg = 2,
-                        cterm = {
-                            bold = true
-                        },
+                })
+                set('OnlyGui', {
+                    gui = {
                         fg = '#00AB00',
-                        bold = true
-                    },
-                    Nothing = {},
-                    Both = {
-                        ctermfg = 1,
-                        cterm = {
-                            bold = true
+                        style = {
+                            bold = true,
                         },
-                        bg = '#FFFFFF',
-                        underline = true
                     },
-                    Link = {
-                        link = 'Both'
-                    }
+                })
+                set('Nothing', {})
+                set('Both', {
+                    term = {
+                        fg = 1,
+                        style = {
+                            bold = true,
+                        },
+                    },
+                    gui = {
+                        bg = '#ffffff',
+                        style = {
+                            underline = true,
+                        },
+                    },
+                })
+                set('Link', {
+                    link = 'Both',
+                })
+            end)
+            assert.are.same({
+                OnlyTerm = {
+                    ctermfg = 3,
+                    fg = '#0000FF',
                 },
-                scheme
-            )
+                OnlyGui = {
+                    ctermfg = 2,
+                    cterm = {
+                        bold = true,
+                    },
+                    fg = '#00AB00',
+                    bold = true,
+                },
+                Nothing = {},
+                Both = {
+                    ctermfg = 1,
+                    cterm = {
+                        bold = true,
+                    },
+                    bg = '#FFFFFF',
+                    underline = true,
+                },
+                Link = {
+                    link = 'Both',
+                },
+            }, scheme)
         end)
     end)
     describe('get', function()
         it('Should get from highlight', function()
-            build(
-                palette,
-                function(get, set)
-                    ---@type HighlightInput
-                    local highlight = {
-                        gui = {
-                            bg = nil,
-                            fg = ColorGui.from_hex('#456'),
-                            style = {
-                                undercurl = true,
-                                inverse = true
-                            }
+            build(palette, function(get, set)
+                ---@type HighlightInput
+                local highlight = {
+                    gui = {
+                        bg = nil,
+                        fg = ColorGui.from_hex('#456'),
+                        style = {
+                            undercurl = true,
+                            inverse = true,
                         },
-                        term = {
-                            fg = nil,
-                            bg = 4,
-                            style = {
-                                strikethrough = true,
-                                underdashed = true,
-                                bold = false
-                            }
-                        }
-                    }
-                    set('Get', highlight)
-                    assert.are.same(highlight, get('Get'))
-                end
-            )
+                    },
+                    term = {
+                        fg = nil,
+                        bg = 4,
+                        style = {
+                            strikethrough = true,
+                            underdashed = true,
+                            bold = false,
+                        },
+                    },
+                }
+                set('Get', highlight)
+                assert.are.same(highlight, get('Get'))
+            end)
         end)
     end)
 end)
