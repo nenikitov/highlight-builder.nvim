@@ -63,20 +63,34 @@ local HighlightSetting = {}
 HighlightSetting.__index = HighlightSetting
 
 ---@param color ColorGui
----@param palette ColorGui[]
----@return integer closest_index
-local function find_closest_index_in_palette(color, palette)
+---@param palette Palette
+---@param is_foreground boolean
+---@return integer | 'NONE' closest_index
+local function find_closest_index_in_palette(color, palette, is_foreground)
     local closest_index = nil
     local closest_distance = math.huge
-    for i, v in ipairs(palette) do
-        local distance = color:distance_squared(v)
+
+    ---@param color_new ColorGui
+    ---@param index integer | 'NONE'
+    local function assign_if_closer(color_new, index)
+        local distance = color:distance_squared(color_new)
         if distance < closest_distance then
-            closest_index = i
+            closest_index = index
             closest_distance = distance
         end
     end
 
-    ---@cast closest_index integer
+    for i, v in ipairs(palette.indexed) do
+        assign_if_closer(v, i)
+    end
+
+    assign_if_closer(is_foreground and palette.primary.fg or palette.primary.bg, 'NONE')
+
+    if type(closest_index) == 'number' then
+        return closest_index - 1
+    end
+
+    ---@cast closest_index 'NONE'
     return closest_index
 end
 
@@ -105,7 +119,7 @@ function HighlightSetting.new(highlight)
     return self
 end
 
----@param palette ColorGui[]
+---@param palette Palette
 ---@return HighlightSetting
 function HighlightSetting:complete(palette)
     if self.link then
@@ -116,15 +130,15 @@ function HighlightSetting:complete(palette)
     if r.term and not r.gui then
         r.gui = {}
         r.gui = {
-            fg = r.term.fg and palette[r.term.fg + 1] or nil,
-            bg = r.term.bg and palette[r.term.bg + 1] or nil,
+            fg = r.term.fg and palette.indexed[r.term.fg + 1] or nil,
+            bg = r.term.bg and palette.indexed[r.term.bg + 1] or nil,
             style = r.term.style,
         }
     elseif r.gui and not r.term then
         r.term = {}
         r.term = {
-            fg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette) - 1) or nil,
-            bg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette) - 1) or nil,
+            fg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette, true)) or nil,
+            bg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette, false)) or nil,
             style = r.gui.style,
         }
     end

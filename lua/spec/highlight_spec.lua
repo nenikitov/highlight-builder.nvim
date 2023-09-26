@@ -3,12 +3,22 @@
 local HighlightSetting = require('highlight_builder.highlight')
 local ColorGui = require('highlight_builder.color')
 
+---@type Palette
 local palette = {
-    ColorGui.from_hex('#000000'),
-    ColorGui.from_hex('#FF0000'),
-    ColorGui.from_hex('#00FF00'),
-    ColorGui.from_hex('#0000FF'),
-    ColorGui.from_hex('#FFFFFF'),
+    primary = {
+        fg = ColorGui.from_hex('#FFF'),
+        bg = ColorGui.from_hex('#000'),
+    },
+    indexed = {
+        ColorGui.from_hex('#111'),
+        ColorGui.from_hex('#A00'),
+        ColorGui.from_hex('#0A0'),
+        ColorGui.from_hex('#AA0'),
+        ColorGui.from_hex('#00A'),
+        ColorGui.from_hex('#A0A'),
+        ColorGui.from_hex('#0AA'),
+        ColorGui.from_hex('#AAA'),
+    },
 }
 
 describe('HighlightSetting', function()
@@ -80,7 +90,7 @@ describe('HighlightSetting', function()
                         fg = 3,
                     },
                     gui = {
-                        fg = palette[4],
+                        fg = palette.indexed[4],
                     },
                 }, highlight)
             end)
@@ -96,7 +106,7 @@ describe('HighlightSetting', function()
                         bg = 1,
                     },
                     gui = {
-                        bg = palette[2],
+                        bg = palette.indexed[2],
                     },
                 }, highlight)
             end)
@@ -152,7 +162,7 @@ describe('HighlightSetting', function()
                 }):complete(palette)
                 assert.are.same({
                     term = {
-                        bg = 0,
+                        bg = 'NONE',
                     },
                     gui = {
                         bg = ColorGui.from_hex('#000'),

@@ -1,6 +1,7 @@
 --#region Term
 
 ---@alias ColorTerm
+---| 'NONE' Default foreground / background color
 ---| 0 Black
 ---| 1 Dark blue
 ---| 2 Dark green

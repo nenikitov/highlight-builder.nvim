@@ -3,13 +3,22 @@
 local build = require('highlight_builder.build')
 local ColorGui = require('highlight_builder.color')
 
--- TODO(Use ColorGui class instead of string colors)
+---@type Palette
 local palette = {
-    '#000000',
-    '#FF0000',
-    '#00FF00',
-    '#0000FF',
-    '#FFFFFF',
+    primary = {
+        fg = ColorGui.from_hex('#FFF'),
+        bg = ColorGui.from_hex('#000'),
+    },
+    indexed = {
+        ColorGui.from_hex('#111'),
+        ColorGui.from_hex('#A00'),
+        ColorGui.from_hex('#0A0'),
+        ColorGui.from_hex('#AA0'),
+        ColorGui.from_hex('#00A'),
+        ColorGui.from_hex('#A0A'),
+        ColorGui.from_hex('#0AA'),
+        ColorGui.from_hex('#AAA'),
+    },
 }
 
 describe('build', function()
@@ -51,7 +60,7 @@ describe('build', function()
             assert.are.same({
                 OnlyTerm = {
                     ctermfg = 3,
-                    fg = '#0000FF',
+                    fg = '#AAAA00',
                 },
                 OnlyGui = {
                     ctermfg = 2,
@@ -122,7 +131,7 @@ describe('build', function()
                     vim.tbl_deep_extend('force', highlight, {
                         term = {
                             bg = nil,
-                            fg = 3,
+                            fg = 4,
                             style = {
                                 undercurl = true,
                                 inverse = true,
