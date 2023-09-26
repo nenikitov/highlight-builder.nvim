@@ -128,14 +128,18 @@ function HighlightSetting:complete(palette)
 
     local r = vim.tbl_deep_extend('force', self, {})
     if r.term and not r.gui then
-        r.gui = {}
         r.gui = {
-            fg = r.term.fg and palette.indexed[r.term.fg + 1] or nil,
-            bg = r.term.bg and palette.indexed[r.term.bg + 1] or nil,
             style = r.term.style,
         }
+        if r.term.fg then
+            r.gui.fg = type(r.term.fg) == 'number' and palette.indexed[r.term.fg + 1]
+                or palette.primary.fg
+        end
+        if r.term.bg then
+            r.gui.bg = type(r.term.bg) == 'number' and palette.indexed[r.term.bg + 1]
+                or palette.primary.bg
+        end
     elseif r.gui and not r.term then
-        r.term = {}
         r.term = {
             fg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette, true)) or nil,
             bg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette, false)) or nil,

@@ -110,6 +110,38 @@ describe('HighlightSetting', function()
                     },
                 }, highlight)
             end)
+
+            it('Should resolve NONE fg color', function()
+                local highlight = HighlightSetting.new({
+                    term = {
+                        fg = 'NONE',
+                    },
+                }):complete(palette)
+                assert.are.same({
+                    term = {
+                        fg = 'NONE',
+                    },
+                    gui = {
+                        fg = palette.primary.fg,
+                    },
+                }, highlight)
+            end)
+
+            it('Should resolve NONE bg color', function()
+                local highlight = HighlightSetting.new({
+                    term = {
+                        bg = 'NONE',
+                    },
+                }):complete(palette)
+                assert.are.same({
+                    term = {
+                        bg = 'NONE',
+                    },
+                    gui = {
+                        bg = palette.primary.bg,
+                    },
+                }, highlight)
+            end)
         end)
 
         describe('Gui without term', function()
@@ -141,7 +173,7 @@ describe('HighlightSetting', function()
             it('Should copy fg from palette', function()
                 local highlight = HighlightSetting.new({
                     gui = {
-                        fg = ColorGui.from_hex('#AA0000'),
+                        fg = ColorGui.from_hex('#A00'),
                     },
                 }):complete(palette)
                 assert.are.same({
@@ -149,12 +181,60 @@ describe('HighlightSetting', function()
                         fg = 1,
                     },
                     gui = {
-                        fg = ColorGui.from_hex('#AA0000'),
+                        fg = ColorGui.from_hex('#A00'),
                     },
                 }, highlight)
             end)
 
             it('Should copy bg from palette', function()
+                local highlight = HighlightSetting.new({
+                    gui = {
+                        bg = ColorGui.from_hex('#222'),
+                    },
+                }):complete(palette)
+                assert.are.same({
+                    term = {
+                        bg = 0,
+                    },
+                    gui = {
+                        bg = ColorGui.from_hex('#222'),
+                    },
+                }, highlight)
+            end)
+
+            it('Should resolve NONE fg color', function()
+                local highlight = HighlightSetting.new({
+                    gui = {
+                        fg = ColorGui.from_hex('#EEE'),
+                    },
+                }):complete(palette)
+                assert.are.same({
+                    term = {
+                        fg = 'NONE',
+                    },
+                    gui = {
+                        fg = ColorGui.from_hex('#EEE'),
+                    },
+                }, highlight)
+            end)
+
+            it('Should not resolve NONE bg color in fg', function()
+                local highlight = HighlightSetting.new({
+                    gui = {
+                        fg = ColorGui.from_hex('#000'),
+                    },
+                }):complete(palette)
+                assert.are.same({
+                    term = {
+                        fg = 0,
+                    },
+                    gui = {
+                        fg = ColorGui.from_hex('#000'),
+                    },
+                }, highlight)
+            end)
+
+            it('Should resolve NONE bg color', function()
                 local highlight = HighlightSetting.new({
                     gui = {
                         bg = ColorGui.from_hex('#000'),
@@ -166,6 +246,22 @@ describe('HighlightSetting', function()
                     },
                     gui = {
                         bg = ColorGui.from_hex('#000'),
+                    },
+                }, highlight)
+            end)
+
+            it('Should not resolve NONE fg color in bg', function()
+                local highlight = HighlightSetting.new({
+                    gui = {
+                        bg = ColorGui.from_hex('#FFF'),
+                    },
+                }):complete(palette)
+                assert.are.same({
+                    term = {
+                        bg = 7,
+                    },
+                    gui = {
+                        bg = ColorGui.from_hex('#FFF'),
                     },
                 }, highlight)
             end)
