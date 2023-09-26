@@ -1,4 +1,33 @@
-local ColorGui = require('highlight_builder.type.color_gui')
+local ColorGui = require('highlight_builder.color')
+
+--#region Types
+
+---@class TextStyle Text style modifications.
+---@field bold boolean? Bolden.
+---@field underline boolean? Underline.
+---@field undercurl boolean? Curly underline.
+---@field underdouble boolean? Double underline.
+---@field underdotted boolean? Dotted underline.
+---@field underdashed boolean? Dashed underline.
+---@field strikethrough boolean? Strikethrough.
+---@field inverse boolean? Inverse background and foreground colors.
+---@field italic boolean? Italicize.
+---@field nocombine boolean? Whether to fully overwrite `TextStyle` properties or to add them.
+
+---@class HighlightCompiledDefinition: TextStyle Highlight properties necessary to create a new highlight group.
+---@field fg string? Foreground color for GUI interfaces.
+---@field bg string? Background color for GUI interfaces.
+---@field sp string? Special color (used for underline) for GUI interfaces.
+---@field ctermfg ColorTerm? Foreground color for terminal interfaces.
+---@field ctermbg ColorTerm? Background color for terminal interfaces.
+---@field cterm TextStyle? Text style for terminal interfaces.
+---@field default boolean? Whether to force this Highlight as "default" so no other highlight commands can overwrite it.
+
+---@class HighlightCompiledLink Highlight properties necessary to create a link highlight.
+---@field link string? Name of the highlight group to link this one to.
+---@field default boolean? Whether to force this Highlight as "default" so no other highlight commands can overwrite it.
+
+---@alias HighlightCompiled HighlightCompiledDefinition | HighlightCompiledLink
 
 ---@class HighlightSettingGui
 ---@field fg ColorGui?
@@ -21,6 +50,10 @@ local ColorGui = require('highlight_builder.type.color_gui')
 ---@field gui HighlightInputGui? GUI properties.
 ---@field term HighlightSettingTerm? Terminal properties.
 ---@field link string? Name of the highlight group to link this one to.
+
+--#endregion
+
+--#region Settings
 
 ---@class HighlightSetting Highlight properties for both GUI and terminal interfaces.
 ---@field gui HighlightSettingGui? GUI properties.
@@ -123,5 +156,7 @@ function HighlightSetting:compile(palette)
 
     return result
 end
+
+--#endregion
 
 return HighlightSetting

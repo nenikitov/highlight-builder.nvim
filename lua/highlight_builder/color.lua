@@ -1,3 +1,27 @@
+--#region Term
+
+---@alias ColorTerm
+---| 0 Black
+---| 1 Dark blue
+---| 2 Dark green
+---| 3 Dark cyan
+---| 4 Dark red
+---| 5 Dark magenta
+---| 6 Dark yellow
+---| 7 Light gray
+---| 8 Dark gray
+---| 9 Blue
+---| 10 Green
+---| 11 Cyan
+---| 12 Red
+---| 13 Magenta
+---| 14 Yellow
+---| 15 White
+
+--#endregion
+
+--#region Gui
+
 ---@param number number
 ---@return number number
 local function round(number)
@@ -194,5 +218,7 @@ end
 function ColorGui:to_rgb()
     return self.r, self.g, self.b
 end
+
+--#endregion
 
 return ColorGui

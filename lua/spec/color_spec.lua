@@ -1,5 +1,5 @@
 local say = require('say')
-local ColorGui = require('highlight_builder.type.color_gui')
+local ColorGui = require('highlight_builder.color')
 
 ---@param state unknown
 ---@param arguments {[1 | 2]: ColorGui}

@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-field -- For assertions
 
-local HighlightSetting = require('highlight_builder.type.highlight_setting')
-local ColorGui = require('highlight_builder.type.color_gui')
+local HighlightSetting = require('highlight_builder.highlight')
+local ColorGui = require('highlight_builder.color')
 
 local palette = {
     ColorGui.from_hex('#000000'),

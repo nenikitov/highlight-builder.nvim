@@ -1,9 +1,6 @@
 local M = {}
 
-M.utils = {
-    ColorGui = require('highlight_builder.type.color_gui'),
-}
-
 M.build = require('highlight_builder.build')
+M.Color = require('highlight_builder.color')
 
 return M
