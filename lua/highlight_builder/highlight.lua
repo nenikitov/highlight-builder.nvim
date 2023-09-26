@@ -123,7 +123,7 @@ end
 ---@return HighlightSetting
 function HighlightSetting:complete(palette)
     if self.link then
-        return HighlightSetting.new { link = self.link }
+        return HighlightSetting.new({ link = self.link })
     end
 
     local r = vim.tbl_deep_extend('force', self, {})
