@@ -8,8 +8,7 @@ local function color_equals(state, arguments)
     local color_1 = arguments[1]
     local color_2 = arguments[2]
 
-    local max_distance = ColorGui.from_rgb(0, 0, 0)
-        :distance_squared(ColorGui.from_rgb(2, 2, 2))
+    local max_distance = ColorGui.from_rgb(0, 0, 0):distance_squared(ColorGui.from_rgb(2, 2, 2))
     local distance = ColorGui.distance_squared(color_1, color_2)
 
     return distance < max_distance
@@ -325,10 +324,7 @@ describe('ColorGui', function()
                     local color = ColorGui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
                     local hue_rotated = color:hue_rotate(amount)
-                    assert.color_equals(
-                        ColorGui.from_hsv(v[3][1], v[3][2], v[3][3]),
-                        hue_rotated
-                    )
+                    assert.color_equals(ColorGui.from_hsv(v[3][1], v[3][2], v[3][3]), hue_rotated)
                 end
             )
         end

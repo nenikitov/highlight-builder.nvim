@@ -12,15 +12,12 @@ return function(builder, palette)
 
     local paletteColorGui = vim.tbl_map(ColorGui.from_hex, palette)
 
-    builder(
-        function(name)
-            highlights[name] = highlights[name]:complete(paletteColorGui)
-            return highlights[name]
-        end,
-        function(name, highlight)
-            highlights[name] = HighlightSetting.new(highlight)
-        end
-    )
+    builder(function(name)
+        highlights[name] = highlights[name]:complete(paletteColorGui)
+        return highlights[name]
+    end, function(name, highlight)
+        highlights[name] = HighlightSetting.new(highlight)
+    end)
 
     return vim.tbl_map(
         ---@param h HighlightSetting
