@@ -1,10 +1,12 @@
+---@diagnostic disable: undefined-field -- For `assert` module
+
 local say = require('say')
 local ColorGui = require('highlight_builder.color')
 
----@param state unknown
+---@param _ unknown
 ---@param arguments {[1 | 2]: ColorGui}
 ---@return boolean
-local function color_equals(state, arguments)
+local function color_equals(_, arguments)
     local color_1 = arguments[1]
     local color_2 = arguments[2]
 
