@@ -3,10 +3,10 @@ local ColorGui = require('highlight_builder.color')
 
 ---@alias Set fun(name: string, highlight: HighlightInput)
 ---@alias Get fun(name: string): HighlightSetting
----@param builder fun(get: Get, set: Set)
 ---@param palette string[]
+---@param builder fun(get: Get, set: Set)
 ---@return {[string]: table}
-return function(builder, palette)
+return function(palette, builder)
     ---@type HighlightSetting[]
     local highlights = {}
 
