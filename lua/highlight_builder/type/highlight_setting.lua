@@ -7,8 +7,8 @@ local ColorGui = require('highlight_builder.type.color_gui')
 ---@field style TextStyle?
 
 ---@class HighlightSettingTerm Highlight properties for terminal interfaces.
----@field ctermfg ColorTerm? Foreground color.
----@field ctermbg ColorTerm? Background color.
+---@field fg ColorTerm? Foreground color.
+---@field bg ColorTerm? Background color.
 ---@field style TextStyle? Text style.
 
 ---@class HighlightInputGui Style Highlight properties for GUI interfaces.
@@ -80,15 +80,15 @@ function HighlightSetting:complete(palette)
     if r.term and not r.gui then
         r.gui = {}
         r.gui = {
-            fg = r.term.ctermfg and palette[r.term.ctermfg + 1] or nil,
-            bg = r.term.ctermbg and palette[r.term.ctermbg + 1] or nil,
+            fg = r.term.fg and palette[r.term.fg + 1] or nil,
+            bg = r.term.bg and palette[r.term.bg + 1] or nil,
             style = r.term.style,
         }
     elseif r.gui and not r.term then
         r.term = {}
         r.term = {
-            ctermfg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette) - 1) or nil,
-            ctermbg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette) - 1) or nil,
+            fg = r.gui.fg and (find_closest_index_in_palette(r.gui.fg, palette) - 1) or nil,
+            bg = r.gui.bg and (find_closest_index_in_palette(r.gui.bg, palette) - 1) or nil,
             style = r.gui.style,
         }
     end
@@ -113,8 +113,8 @@ function HighlightSetting:compile(palette)
         fg = completed.gui and completed.gui.fg and completed.gui.fg:to_hex() or nil,
         bg = completed.gui and completed.gui.bg and completed.gui.bg:to_hex() or nil,
         sp = completed.gui and completed.gui.sp and completed.gui.sp:to_hex() or nil,
-        ctermfg = completed.term and completed.term.ctermfg or nil,
-        ctermbg = completed.term and completed.term.ctermbg or nil,
+        ctermfg = completed.term and completed.term.fg or nil,
+        ctermbg = completed.term and completed.term.bg or nil,
         cterm = completed.term and completed.term.style or nil,
     }
     for k, v in pairs(completed.gui and completed.gui.style or {}) do

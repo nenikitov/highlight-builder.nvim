@@ -75,13 +75,13 @@ describe('HighlightSetting', function()
             it('Should copy fg from palette', function()
                 local highlight = HighlightSetting.new {
                     term = {
-                        ctermfg = 3
+                        fg = 3
                     }
                 }:complete(palette)
                 assert.are.same(
                     {
                         term = {
-                            ctermfg = 3
+                            fg = 3
                         },
                         gui = {
                             fg = palette[4]
@@ -94,13 +94,13 @@ describe('HighlightSetting', function()
             it('Should copy bg from palette', function()
                 local highlight = HighlightSetting.new {
                     term = {
-                        ctermbg = 1
+                        bg = 1
                     }
                 }:complete(palette)
                 assert.are.same(
                     {
                         term = {
-                            ctermbg = 1
+                            bg = 1
                         },
                         gui = {
                             bg = palette[2]
@@ -149,7 +149,7 @@ describe('HighlightSetting', function()
                 assert.are.same(
                     {
                         term = {
-                            ctermfg = 1
+                            fg = 1
                         },
                         gui = {
                             fg = ColorGui.from_hex("#AA0000")
@@ -168,7 +168,7 @@ describe('HighlightSetting', function()
                 assert.are.same(
                     {
                         term = {
-                            ctermbg = 0
+                            bg = 0
                         },
                         gui = {
                             bg = ColorGui.from_hex('#000')
@@ -186,7 +186,7 @@ describe('HighlightSetting', function()
                         fg = '#123456'
                     },
                     term = {
-                        ctermfg = 3,
+                        fg = 3,
                         style = {
                             undercurl = true,
                             strikethrough = true
@@ -199,7 +199,7 @@ describe('HighlightSetting', function()
                             fg = ColorGui.from_hex('#123456')
                         },
                         term = {
-                            ctermfg = 3,
+                            fg = 3,
                             style = {
                                 undercurl = true,
                                 strikethrough = true
@@ -214,7 +214,7 @@ describe('HighlightSetting', function()
                 local highlight = HighlightSetting.new {
                     gui = {},
                     term = {
-                        ctermfg = 3,
+                        fg = 3,
                         style = {
                             undercurl = true,
                             strikethrough = true
@@ -225,7 +225,7 @@ describe('HighlightSetting', function()
                     {
                         gui = {},
                         term = {
-                            ctermfg = 3,
+                            fg = 3,
                             style = {
                                 undercurl = true,
                                 strikethrough = true
@@ -254,8 +254,8 @@ describe('HighlightSetting', function()
         it('Should translate all properties', function()
             local highlight = HighlightSetting.new {
                 term = {
-                    ctermfg = 2,
-                    ctermbg = nil,
+                    fg = 2,
+                    bg = nil,
                     style = {
                         bold = true
                     }
