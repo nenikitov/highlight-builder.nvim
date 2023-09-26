@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-field -- For assertions
+
 local HighlightSetting = require('highlight_builder.type.highlight_setting')
 local ColorGui = require('highlight_builder.type.color_gui')
 
@@ -42,7 +44,7 @@ describe('HighlightSetting', function()
         end)
 
         describe('Term without gui', function()
-            it('Should copy term style', function()
+            it('Should copy style', function()
                 local highlight = HighlightSetting.new {
                     term = {
                         style = {
@@ -70,7 +72,7 @@ describe('HighlightSetting', function()
                 )
             end)
 
-            it('Should copy term fg from palette', function()
+            it('Should copy fg from palette', function()
                 local highlight = HighlightSetting.new {
                     term = {
                         ctermfg = 3
@@ -89,7 +91,7 @@ describe('HighlightSetting', function()
                 )
             end)
 
-            it('Should copy term bg from palette', function()
+            it('Should copy bg from palette', function()
                 local highlight = HighlightSetting.new {
                     term = {
                         ctermbg = 1
@@ -107,6 +109,179 @@ describe('HighlightSetting', function()
                     highlight
                 )
             end)
+        end)
+
+        describe('Gui without term', function()
+            it('Should copy style', function()
+                local highlight = HighlightSetting.new {
+                    gui = {
+                        style = {
+                            bold = true,
+                            underline = true
+                        }
+                    }
+                }:complete(palette)
+                assert.are.same(
+                    {
+                        term = {
+                            style = {
+                                bold = true,
+                                underline = true
+                            }
+                        },
+                        gui = {
+                            style = {
+                                bold = true,
+                                underline = true
+                            }
+                        },
+                    },
+                    highlight
+                )
+            end)
+
+            it('Should copy fg from palette', function()
+                local highlight = HighlightSetting.new {
+                    gui = {
+                        fg = ColorGui.from_hex('#AA0000')
+                    }
+                }:complete(palette)
+                assert.are.same(
+                    {
+                        term = {
+                            ctermfg = 1
+                        },
+                        gui = {
+                            fg = ColorGui.from_hex("#AA0000")
+                        },
+                    },
+                    highlight
+                )
+            end)
+
+            it('Should copy bg from palette', function()
+                local highlight = HighlightSetting.new {
+                    gui = {
+                        bg = ColorGui.from_hex('#000')
+                    }
+                }:complete(palette)
+                assert.are.same(
+                    {
+                        term = {
+                            ctermbg = 0
+                        },
+                        gui = {
+                            bg = ColorGui.from_hex('#000')
+                        },
+                    },
+                    highlight
+                )
+            end)
+        end)
+
+        describe('Gui and term', function()
+            it('Should conserve all values', function()
+                local highlight = HighlightSetting.new {
+                    gui = {
+                        fg = '#123456'
+                    },
+                    term = {
+                        ctermfg = 3,
+                        style = {
+                            undercurl = true,
+                            strikethrough = true
+                        }
+                    }
+                }:complete(palette)
+                assert.are.same(
+                    {
+                        gui = {
+                            fg = ColorGui.from_hex('#123456')
+                        },
+                        term = {
+                            ctermfg = 3,
+                            style = {
+                                undercurl = true,
+                                strikethrough = true
+                            }
+                        }
+                    },
+                    highlight
+                )
+            end)
+
+            it('Should conserve even with empty style', function()
+                local highlight = HighlightSetting.new {
+                    gui = {},
+                    term = {
+                        ctermfg = 3,
+                        style = {
+                            undercurl = true,
+                            strikethrough = true
+                        }
+                    }
+                }:complete(palette)
+                assert.are.same(
+                    {
+                        gui = {},
+                        term = {
+                            ctermfg = 3,
+                            style = {
+                                undercurl = true,
+                                strikethrough = true
+                            }
+                        }
+                    },
+                    highlight
+                )
+            end)
+        end)
+    end)
+
+    describe('compile', function()
+        it('Should translate link', function()
+            local highlight = HighlightSetting.new {
+                link = 'Hello'
+            }:compile(palette)
+            assert.are.same(
+                {
+                    link = 'Hello'
+                },
+                highlight
+            )
+        end)
+
+        it('Should translate all properties', function()
+            local highlight = HighlightSetting.new {
+                term = {
+                    ctermfg = 2,
+                    ctermbg = nil,
+                    style = {
+                        bold = true
+                    }
+                },
+                gui = {
+                    fg = '#123',
+                    bg = '#FAB',
+                    sp = '#789',
+                    style = {
+                        inverse = true
+                    }
+                }
+            }:compile(palette)
+            assert.are.same(
+                {
+                    ctermfg = 2,
+                    cterm = {
+                        bold = true
+                    },
+                    fg = '#112233',
+                    bg = '#FFAABB',
+                    sp = '#778899',
+                    inverse = true
+                },
+                highlight
+            )
         end)
     end)
 end)

@@ -23,7 +23,7 @@ return function(builder, palette)
     )
 
     return vim.tbl_map(
-    ---@param h HighlightSetting
+        ---@param h HighlightSetting
         function(h)
             return h:compile(paletteColorGui)
         end,

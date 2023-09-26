@@ -76,7 +76,7 @@ function HighlightSetting:complete(palette)
         return { link = self.link }
     end
 
-    local r =  vim.tbl_deep_extend('force', self, {})
+    local r = vim.tbl_deep_extend('force', self, {})
     if r.term and not r.gui then
         r.gui = {}
         r.gui = {
@@ -93,7 +93,8 @@ function HighlightSetting:complete(palette)
         }
     end
 
-    return r
+    ---@diagnostic disable-next-line: param-type-mismatch -- Types match
+    return HighlightSetting.new(r)
 end
 
 --- Compile highlight settings transforming it into a table that NeoVim can understand.
