@@ -103,5 +103,35 @@ describe('build', function()
                 assert.are.same(highlight, get('Get'))
             end)
         end)
+
+        it('Should complete the highlight', function()
+            build(palette, function(get, set)
+                ---@type HighlightInput
+                local highlight = {
+                    gui = {
+                        bg = nil,
+                        fg = ColorGui.from_hex('#009'),
+                        style = {
+                            undercurl = true,
+                            inverse = true,
+                        },
+                    },
+                }
+                set('Get', highlight)
+                assert.are.same(
+                    vim.tbl_deep_extend('force', highlight, {
+                        term = {
+                            bg = nil,
+                            fg = 3,
+                            style = {
+                                undercurl = true,
+                                inverse = true,
+                            },
+                        },
+                    }),
+                    get('Get')
+                )
+            end)
+        end)
     end)
 end)
