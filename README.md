@@ -28,8 +28,7 @@ local palette = require('highlight_builder').palette
 
 -- Construct color scheme
 local scheme = bulid(
-    -- TODO(improve palettes)
-    palette.test,
+    palette.default,
     function(get, set)
         set('HighlightGroup', {
             -- Highlight structure goes here
