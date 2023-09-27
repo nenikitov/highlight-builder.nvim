@@ -1,6 +1,6 @@
 # highlight-builder.nvim
 
-Utility plugin to create NeoVim colorschemes that work both in truecolor, 256, and 16 color terminals.
+Utility plugin to create Neovim colorschemes that work both in truecolor, 256, and 16 color terminals.
 
 ## Installation
 
