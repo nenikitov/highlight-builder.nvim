@@ -28,7 +28,7 @@ local palette = require('highlight_builder').palette
 
 -- Construct color scheme
 local scheme = bulid(
-    palette.default,
+    palette.default(256),
     function(get, set)
         set('HighlightGroup', {
             -- Highlight structure goes here
@@ -198,3 +198,91 @@ local hex_string = magenta:to_hex()
 local h, s, v = dark_red:to_hsv()
 local r, g, b = pink:to_rgb()
 ```
+
+## Palette
+
+### Palette structure
+
+```lua
+--- All properties are required, and all colors are instances of `Color`
+local palette = {
+    --- Default colors (when cterm color is `'NONE'`)
+    primary = {
+        fg = Color.from_hex("#FFF"),
+        bg = Color.from_hex("#000"),
+    },
+    --- Colors indexable with an integer
+    indexed = {
+        Color.from_hex('#000'),
+        Color.from_hex('#A00'),
+        Color.from_hex('#0A0'),
+        Color.from_hex('#A50'),
+        Color.from_hex('#00A'),
+        Color.from_hex('#A0A'),
+        Color.from_hex('#0AA'),
+        Color.from_hex('#AAA'),
+        -- ...
+    }
+}
+```
+
+### Built-in palettes
+
+#### Default
+
+- Follows default 16 colors of Linux TTY color palette with 240 additional indexed colors
+- Can be generated with either `8`, `16`, or `256` colors
+- Usage
+    ```lua
+    local default = require('highlight_builder').palette.default
+
+    local palette = default(
+        --- 8 | 16 | 256 - Number of colors to generate
+        256
+    )
+    ```
+
+#### Custom
+
+- Requests primary, dark, and bright versions of terminal color scheme and optionally adds 240 indexed colors
+- Can be generated with either `16` or `256` colors
+- Usage
+    ```lua
+    local custom = require('highlight_builder').palette.custom
+
+    local palette = custom(
+        --- Color scheme
+        {
+            --- Primary colors
+            primary = {
+                --- Foreground color - HEX of format `#000` or `#000000`, or an instance of `Color` 
+                fg = '#14161E',
+                --- Background color - Same type as `primary.fg`
+                bg = Color.from_hex('#B4BFC5')
+            },
+            --- Dark colors
+            dark = {
+                --- Dark gray - Same type as `primary.fg`
+                black = '#20232B'
+                --- Dark red - ...
+                red = '#ED3A66'
+                green = '#70B74B'
+                yellow = '#F89861'
+                blue = '#26B1E4'
+                magenta = '#B570EB'
+                cyan = '#3CAEB2'
+                white = '#A6ACB0'
+            },
+            --- Bright colors - Same type as `dark`
+            bright = {
+                -- ...
+            }
+        },
+        --- Whether to complete to 256 colors - boolean
+        true
+    )
+    ```
+
+#### Fully custom
+
+- You can always define a fully custom palette by following the [palette structure](#palette-structure)
