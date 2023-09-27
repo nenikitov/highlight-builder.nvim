@@ -2,21 +2,21 @@
 
 ---@alias ColorTerm
 ---| 'NONE' Default foreground / background color
----| 0 Black
----| 1 Dark blue
+---| 0 Dark black
+---| 1 Dark red
 ---| 2 Dark green
----| 3 Dark cyan
----| 4 Dark red
+---| 3 Dark yellow
+---| 4 Dark blue
 ---| 5 Dark magenta
----| 6 Dark yellow
----| 7 Light gray
----| 8 Dark gray
----| 9 Blue
+---| 6 Dark cyan
+---| 7 Dark white
+---| 8 Light black
+---| 9 Red
 ---| 10 Green
----| 11 Cyan
----| 12 Red
+---| 11 Yellow
+---| 12 Blue
 ---| 13 Magenta
----| 14 Yellow
+---| 14 Cyan
 ---| 15 White
 
 --#endregion
