@@ -1,23 +1,23 @@
 ---@diagnostic disable: undefined-field -- For `assert` module
 
 local HighlightSetting = require('highlight_builder.highlight')
-local ColorGui = require('highlight_builder.color')
+local Color = require('highlight_builder.color')
 
 ---@type Palette
 local palette = {
     primary = {
-        fg = ColorGui.from_hex('#FFF'),
-        bg = ColorGui.from_hex('#000'),
+        fg = Color.Gui.from_hex('#FFF'),
+        bg = Color.Gui.from_hex('#000'),
     },
     indexed = {
-        ColorGui.from_hex('#111'),
-        ColorGui.from_hex('#A00'),
-        ColorGui.from_hex('#0A0'),
-        ColorGui.from_hex('#AA0'),
-        ColorGui.from_hex('#00A'),
-        ColorGui.from_hex('#A0A'),
-        ColorGui.from_hex('#0AA'),
-        ColorGui.from_hex('#AAA'),
+        Color.Gui.from_hex('#111'),
+        Color.Gui.from_hex('#A00'),
+        Color.Gui.from_hex('#0A0'),
+        Color.Gui.from_hex('#AA0'),
+        Color.Gui.from_hex('#00A'),
+        Color.Gui.from_hex('#A0A'),
+        Color.Gui.from_hex('#0AA'),
+        Color.Gui.from_hex('#AAA'),
     },
 }
 
@@ -53,221 +53,7 @@ describe('HighlightSetting', function()
             end)
         end)
 
-        describe('Term without gui', function()
-            it('Should copy style', function()
-                local highlight = HighlightSetting.new({
-                    term = {
-                        style = {
-                            bold = true,
-                            underline = true,
-                        },
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        style = {
-                            bold = true,
-                            underline = true,
-                        },
-                    },
-                    gui = {
-                        style = {
-                            bold = true,
-                            underline = true,
-                        },
-                    },
-                }, highlight)
-            end)
-
-            it('Should copy fg from palette', function()
-                local highlight = HighlightSetting.new({
-                    term = {
-                        fg = 3,
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        fg = 3,
-                    },
-                    gui = {
-                        fg = palette.indexed[4],
-                    },
-                }, highlight)
-            end)
-
-            it('Should copy bg from palette', function()
-                local highlight = HighlightSetting.new({
-                    term = {
-                        bg = 1,
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        bg = 1,
-                    },
-                    gui = {
-                        bg = palette.indexed[2],
-                    },
-                }, highlight)
-            end)
-
-            it('Should resolve NONE fg color', function()
-                local highlight = HighlightSetting.new({
-                    term = {
-                        fg = 'NONE',
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        fg = 'NONE',
-                    },
-                    gui = {
-                        fg = palette.primary.fg,
-                    },
-                }, highlight)
-            end)
-
-            it('Should resolve NONE bg color', function()
-                local highlight = HighlightSetting.new({
-                    term = {
-                        bg = 'NONE',
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        bg = 'NONE',
-                    },
-                    gui = {
-                        bg = palette.primary.bg,
-                    },
-                }, highlight)
-            end)
-        end)
-
-        describe('Gui without term', function()
-            it('Should copy style', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        style = {
-                            bold = true,
-                            underline = true,
-                        },
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        style = {
-                            bold = true,
-                            underline = true,
-                        },
-                    },
-                    gui = {
-                        style = {
-                            bold = true,
-                            underline = true,
-                        },
-                    },
-                }, highlight)
-            end)
-
-            it('Should copy fg from palette', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        fg = ColorGui.from_hex('#A00'),
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        fg = 1,
-                    },
-                    gui = {
-                        fg = ColorGui.from_hex('#A00'),
-                    },
-                }, highlight)
-            end)
-
-            it('Should copy bg from palette', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        bg = ColorGui.from_hex('#222'),
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        bg = 0,
-                    },
-                    gui = {
-                        bg = ColorGui.from_hex('#222'),
-                    },
-                }, highlight)
-            end)
-
-            it('Should resolve NONE fg color', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        fg = ColorGui.from_hex('#EEE'),
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        fg = 'NONE',
-                    },
-                    gui = {
-                        fg = ColorGui.from_hex('#EEE'),
-                    },
-                }, highlight)
-            end)
-
-            it('Should not resolve NONE bg color in fg', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        fg = ColorGui.from_hex('#000'),
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        fg = 0,
-                    },
-                    gui = {
-                        fg = ColorGui.from_hex('#000'),
-                    },
-                }, highlight)
-            end)
-
-            it('Should resolve NONE bg color', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        bg = ColorGui.from_hex('#000'),
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        bg = 'NONE',
-                    },
-                    gui = {
-                        bg = ColorGui.from_hex('#000'),
-                    },
-                }, highlight)
-            end)
-
-            it('Should not resolve NONE fg color in bg', function()
-                local highlight = HighlightSetting.new({
-                    gui = {
-                        bg = ColorGui.from_hex('#FFF'),
-                    },
-                }):complete(palette)
-                assert.are.same({
-                    term = {
-                        bg = 7,
-                    },
-                    gui = {
-                        bg = ColorGui.from_hex('#FFF'),
-                    },
-                }, highlight)
-            end)
-        end)
-
-        describe('Gui and term', function()
+        describe('Gui, term, and tty', function()
             it('Should conserve all values', function()
                 local highlight = HighlightSetting.new({
                     gui = {
@@ -280,16 +66,28 @@ describe('HighlightSetting', function()
                             strikethrough = true,
                         },
                     },
+                    tty = {
+                        fg = 1,
+                        style = {
+                            bold = true,
+                        },
+                    },
                 }):complete(palette)
                 assert.are.same({
                     gui = {
-                        fg = ColorGui.from_hex('#123456'),
+                        fg = Color.Gui.from_hex('#123456'),
                     },
                     term = {
                         fg = 3,
                         style = {
                             undercurl = true,
                             strikethrough = true,
+                        },
+                    },
+                    tty = {
+                        fg = 1,
+                        style = {
+                            bold = true,
                         },
                     },
                 }, highlight)
@@ -305,6 +103,12 @@ describe('HighlightSetting', function()
                             strikethrough = true,
                         },
                     },
+                    tty = {
+                        fg = 1,
+                        style = {
+                            bold = true,
+                        },
+                    },
                 }):complete(palette)
                 assert.are.same({
                     gui = {},
@@ -315,7 +119,709 @@ describe('HighlightSetting', function()
                             strikethrough = true,
                         },
                     },
+                    tty = {
+                        fg = 1,
+                        style = {
+                            bold = true,
+                        },
+                    },
                 }, highlight)
+            end)
+        end)
+
+        describe('Complete Gui', function()
+            describe('With Term (priority) and Tty', function()
+                it('Should copy style', function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        gui = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' background color", function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            bg = 'NONE',
+                        },
+                        tty = {
+                            bg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            bg = 'NONE',
+                        },
+                        gui = {
+                            bg = palette.primary.bg,
+                        },
+                        tty = {
+                            bg = 1,
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' foreground color", function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            fg = 'NONE',
+                        },
+                        tty = {
+                            fg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            fg = 'NONE',
+                        },
+                        gui = {
+                            fg = palette.primary.fg,
+                        },
+                        tty = {
+                            fg = 1,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up background color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            bg = 3,
+                        },
+                        tty = {
+                            bg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            bg = 3,
+                        },
+                        gui = {
+                            bg = palette.indexed[4],
+                        },
+                        tty = {
+                            bg = 1,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up foreground color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            fg = 4,
+                        },
+                        tty = {
+                            fg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            fg = 4,
+                        },
+                        gui = {
+                            fg = palette.indexed[5],
+                        },
+                        tty = {
+                            fg = 1,
+                        },
+                    }, highlight)
+                end)
+            end)
+
+            describe('With Tty', function()
+                it('Should copy style', function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                        gui = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                        term = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' background color", function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            bg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = 1,
+                        },
+                        gui = {
+                            bg = palette.indexed[2],
+                        },
+                        term = {
+                            bg = 1,
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' foreground color", function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            fg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = 1,
+                        },
+                        gui = {
+                            fg = palette.indexed[2],
+                        },
+                        term = {
+                            fg = 1,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up background color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            bg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = 1,
+                        },
+                        gui = {
+                            bg = palette.indexed[2],
+                        },
+                        term = {
+                            bg = 1,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up foreground color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            fg = 1,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = 1,
+                        },
+                        gui = {
+                            fg = palette.indexed[2],
+                        },
+                        term = {
+                            fg = 1,
+                        },
+                    }, highlight)
+                end)
+            end)
+        end)
+
+        describe('Complete Term', function()
+            describe('With Gui (priority) and Tty', function()
+                it('Should copy style', function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        gui = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        term = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }, highlight)
+                end)
+
+                it("Should not resolve 'NONE' background color", function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            bg = palette.primary.bg,
+                        },
+                        tty = {
+                            bg = 2,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            bg = Color.Term.indexes.normal.black,
+                        },
+                        gui = {
+                            bg = palette.primary.bg,
+                        },
+                        tty = {
+                            bg = 2,
+                        },
+                    }, highlight)
+                end)
+
+                it("Should not resolve 'NONE' foreground color", function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            fg = palette.primary.fg,
+                        },
+                        tty = {
+                            fg = 2,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            fg = Color.Term.indexes.normal.white,
+                        },
+                        gui = {
+                            fg = palette.primary.fg,
+                        },
+                        tty = {
+                            fg = 2,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up background color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            bg = '#B00',
+                        },
+                        tty = {
+                            bg = 6,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            bg = Color.Term.indexes.normal.red,
+                        },
+                        gui = {
+                            bg = Color.Gui.from_hex('#B00'),
+                        },
+                        tty = {
+                            bg = 6,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up foreground color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            fg = '#B00',
+                        },
+                        tty = {
+                            fg = 6,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        term = {
+                            fg = Color.Term.indexes.normal.red,
+                        },
+                        gui = {
+                            fg = Color.Gui.from_hex('#B00'),
+                        },
+                        tty = {
+                            fg = 6,
+                        },
+                    }, highlight)
+                end)
+            end)
+
+            describe('With Tty', function()
+                it('Should copy style', function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                        term = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                        gui = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' background color", function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            bg = 'NONE',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = 'NONE',
+                        },
+                        term = {
+                            bg = 'NONE',
+                        },
+                        gui = {
+                            bg = palette.primary.bg,
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' foreground color", function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            fg = 'NONE',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = 'NONE',
+                        },
+                        term = {
+                            fg = 'NONE',
+                        },
+                        gui = {
+                            fg = palette.primary.fg,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should copy background color', function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            bg = 6,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = 6,
+                        },
+                        term = {
+                            bg = 6,
+                        },
+                        gui = {
+                            bg = palette.indexed[7],
+                        },
+                    }, highlight)
+                end)
+
+                it('Should copy foreground color', function()
+                    local highlight = HighlightSetting.new({
+                        tty = {
+                            fg = 6,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = 6,
+                        },
+                        term = {
+                            fg = 6,
+                        },
+                        gui = {
+                            fg = palette.indexed[7],
+                        },
+                    }, highlight)
+                end)
+            end)
+        end)
+
+        describe('Complete Tty', function()
+            describe('With Term (priority) and Gui', function()
+                it('Should copy style', function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        gui = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        term = {
+                            style = {
+                                bold = true,
+                                underline = true,
+                            },
+                        },
+                        gui = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' background color", function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            bg = 'NONE',
+                        },
+                        gui = {
+                            bg = '#FFF',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = 'NONE',
+                        },
+                        term = {
+                            bg = 'NONE',
+                        },
+                        gui = {
+                            bg = Color.Gui.from_hex('#FFF'),
+                        },
+                    }, highlight)
+                end)
+
+                it("Should resolve 'NONE' foreground color", function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            fg = 'NONE',
+                        },
+                        gui = {
+                            fg = '#FFF',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = 'NONE',
+                        },
+                        term = {
+                            fg = 'NONE',
+                        },
+                        gui = {
+                            fg = Color.Gui.from_hex('#FFF'),
+                        },
+                    }, highlight)
+                end)
+
+                it('Should copy background color', function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            bg = 6,
+                        },
+                        gui = {
+                            bg = '#B00',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = 6,
+                        },
+                        term = {
+                            bg = 6,
+                        },
+                        gui = {
+                            bg = Color.Gui.from_hex('#B00'),
+                        },
+                    }, highlight)
+                end)
+
+                it('Should copy foreground color', function()
+                    local highlight = HighlightSetting.new({
+                        term = {
+                            fg = 6,
+                        },
+                        gui = {
+                            fg = '#B00',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = 6,
+                        },
+                        term = {
+                            fg = 6,
+                        },
+                        gui = {
+                            fg = Color.Gui.from_hex('#B00'),
+                        },
+                    }, highlight)
+                end)
+            end)
+
+            describe('With Gui', function()
+                it('Should copy style', function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                        term = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                        gui = {
+                            style = {
+                                inverse = true,
+                            },
+                        },
+                    }, highlight)
+                end)
+
+                it("Should not resolve 'NONE' background color", function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            bg = palette.primary.bg,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = Color.Term.indexes.normal.black,
+                        },
+                        term = {
+                            bg = Color.Term.indexes.normal.black,
+                        },
+                        gui = {
+                            bg = palette.primary.bg,
+                        },
+                    }, highlight)
+                end)
+
+                it("Should not resolve 'NONE' foreground color", function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            fg = palette.primary.fg,
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = Color.Term.indexes.normal.white,
+                        },
+                        term = {
+                            fg = Color.Term.indexes.normal.white,
+                        },
+                        gui = {
+                            fg = palette.primary.fg,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up background color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            bg = '#0B0',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            bg = Color.Term.indexes.normal.green,
+                        },
+                        gui = {
+                            bg = Color.Gui.from_hex('#0B0'),
+                        },
+                        term = {
+                            bg = Color.Term.indexes.normal.green,
+                        },
+                    }, highlight)
+                end)
+
+                it('Should look up foreground color in the palette', function()
+                    local highlight = HighlightSetting.new({
+                        gui = {
+                            fg = '#0B0',
+                        },
+                    }):complete(palette)
+                    assert.are.same({
+                        tty = {
+                            fg = Color.Term.indexes.normal.green,
+                        },
+                        gui = {
+                            fg = Color.Gui.from_hex('#0B0'),
+                        },
+                        term = {
+                            fg = Color.Term.indexes.normal.green,
+                        },
+                    }, highlight)
+                end)
             end)
         end)
     end)
@@ -330,34 +836,72 @@ describe('HighlightSetting', function()
             }, highlight)
         end)
 
-        it('Should translate all properties', function()
-            local highlight = HighlightSetting.new({
-                term = {
-                    fg = 2,
-                    bg = nil,
-                    style = {
+        describe('Should translate all properties', function()
+            it('Force 256 colors', function()
+                local highlight = HighlightSetting.new({
+                    term = {
+                        fg = 2,
+                        bg = nil,
+                        style = {
+                            bold = true,
+                        },
+                    },
+                    tty = {
+                        fg = 4,
+                        bg = 7,
+                    },
+                    gui = {
+                        fg = '#123',
+                        bg = '#FAB',
+                        sp = '#789',
+                        style = {
+                            inverse = true,
+                        },
+                    },
+                }):compile(palette, false)
+                assert.are.same({
+                    ctermfg = 2,
+                    cterm = {
                         bold = true,
                     },
-                },
-                gui = {
-                    fg = '#123',
-                    bg = '#FAB',
-                    sp = '#789',
-                    style = {
-                        inverse = true,
+                    fg = '#112233',
+                    bg = '#FFAABB',
+                    sp = '#778899',
+                    inverse = true,
+                }, highlight)
+            end)
+
+            it('Force 16 colors', function()
+                local highlight = HighlightSetting.new({
+                    term = {
+                        fg = 2,
+                        bg = nil,
+                        style = {
+                            bold = true,
+                        },
                     },
-                },
-            }):compile(palette)
-            assert.are.same({
-                ctermfg = 2,
-                cterm = {
-                    bold = true,
-                },
-                fg = '#112233',
-                bg = '#FFAABB',
-                sp = '#778899',
-                inverse = true,
-            }, highlight)
+                    tty = {
+                        fg = 4,
+                        bg = 7,
+                    },
+                    gui = {
+                        fg = '#123',
+                        bg = '#FAB',
+                        sp = '#789',
+                        style = {
+                            inverse = true,
+                        },
+                    },
+                }):compile(palette, true)
+                assert.are.same({
+                    ctermfg = 4,
+                    ctermbg = 7,
+                    fg = '#112233',
+                    bg = '#FFAABB',
+                    sp = '#778899',
+                    inverse = true,
+                }, highlight)
+            end)
         end)
     end)
 end)

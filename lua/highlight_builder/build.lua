@@ -17,7 +17,7 @@ return function(palette, builder)
     end)
 
     return vim.tbl_map(
-        ---@param h HighlightSetting
+    ---@param h HighlightSetting
         function(h)
             return h:compile(palette)
         end,

@@ -7,7 +7,7 @@ Utility plugin to create Neovim colorschemes that work both in truecolor, 256, a
 - Install it like any other Neovim plugin.
     - [packer.nvim](https://github.com/wbthomason/packer.nvim)
         ```lua
-        use 'nenikitov/highlight-builder.nvim'
+        use('nenikitov/highlight-builder.nvim')
         ```
     - [lazy.nvim](https://github.com/folke/lazy.nvim)
         ```lua
@@ -27,16 +27,13 @@ local Color = require('highlight_builder').Color
 local palette = require('highlight_builder').palette
 
 -- Construct color scheme
-local scheme = bulid(
-    palette.default(256),
-    function(get, set)
-        set('HighlightGroup', {
-            -- Highlight structure goes here
-            -- ...
-        })
+local scheme = bulid(palette.default(256), function(get, set)
+    set('HighlightGroup', {
+        -- Highlight structure goes here
         -- ...
-    end
-)
+    })
+    -- ...
+end)
 
 -- Apply
 for k, v in pairs(scheme) do
@@ -79,7 +76,7 @@ local highlight = {
             italic = false,
             --- Fully overwrite the style instead of appending to it - boolean
             nocombine = false,
-        }
+        },
     },
     --- Style used for basic terminals
     term = {
@@ -88,8 +85,8 @@ local highlight = {
         --- Background color - Same type as `term.fg`
         bg = 0,
         --- Various font options - Same type as `gui.style`
-        style = { ... }
-    }
+        style = { ... },
+    },
 }
 ```
 
@@ -159,14 +156,15 @@ local highlight = {
     })
     set('DiagnosticUnderlineError', {
         gui = {
-            sp = get('DiagnosticError').gui.fg
-        }
+            sp = get('DiagnosticError').gui.fg,
+        },
     })
     ```
 - Gui colors will be automatically transformed to color class (you can use color functions after)
     ```lua
     get('DiagnosticError').gui.fg:darken(0.2)
     ```
+- You cannot `get` a highlight that wasn't `set` before
 
 ## Color
 
@@ -208,8 +206,8 @@ local r, g, b = pink:to_rgb()
 local palette = {
     --- Default colors (when cterm color is `'NONE'`)
     primary = {
-        fg = Color.from_hex("#FFF"),
-        bg = Color.from_hex("#000"),
+        fg = Color.from_hex('#FFF'),
+        bg = Color.from_hex('#000'),
     },
     --- Colors indexable with an integer
     indexed = {
@@ -222,7 +220,7 @@ local palette = {
         Color.from_hex('#0AA'),
         Color.from_hex('#AAA'),
         -- ...
-    }
+    },
 }
 ```
 
@@ -255,7 +253,7 @@ local palette = {
         {
             --- Primary colors
             primary = {
-                --- Foreground color - HEX of format `#000` or `#000000`, or an instance of `Color` 
+                --- Foreground color - HEX of format `#000` or `#000000`, or an instance of `Color`
                 fg = '#14161E',
                 --- Background color - Same type as `primary.fg`
                 bg = Color.from_hex('#B4BFC5')
