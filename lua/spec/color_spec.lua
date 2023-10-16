@@ -29,11 +29,11 @@ assert:register(
 describe('Term', function()
     describe('brighten', function()
         for _, v in ipairs({
-            { Color.Term.indexes.primary.bg,     Color.Term.indexes.primary.bg },
-            { Color.Term.indexes.primary.fg,     Color.Term.indexes.primary.fg },
-            { Color.Term.indexes.normal.green,   Color.Term.indexes.bright.green },
+            { Color.Term.indexes.primary.bg, Color.Term.indexes.primary.bg },
+            { Color.Term.indexes.primary.fg, Color.Term.indexes.primary.fg },
+            { Color.Term.indexes.normal.green, Color.Term.indexes.bright.green },
             { Color.Term.indexes.normal.magenta, Color.Term.indexes.bright.magenta },
-            { Color.Term.indexes.bright.green,   Color.Term.indexes.bright.green },
+            { Color.Term.indexes.bright.green, Color.Term.indexes.bright.green },
             { Color.Term.indexes.bright.magenta, Color.Term.indexes.bright.magenta },
         }) do
             it('Should brighten color ' .. v[1] .. ' to ' .. v[2], function()
@@ -44,11 +44,11 @@ describe('Term', function()
 
     describe('darken', function()
         for _, v in ipairs({
-            { Color.Term.indexes.primary.bg,  Color.Term.indexes.primary.bg },
-            { Color.Term.indexes.primary.fg,  Color.Term.indexes.primary.fg },
-            { Color.Term.indexes.bright.red,  Color.Term.indexes.normal.red },
+            { Color.Term.indexes.primary.bg, Color.Term.indexes.primary.bg },
+            { Color.Term.indexes.primary.fg, Color.Term.indexes.primary.fg },
+            { Color.Term.indexes.bright.red, Color.Term.indexes.normal.red },
             { Color.Term.indexes.bright.cyan, Color.Term.indexes.normal.cyan },
-            { Color.Term.indexes.normal.red,  Color.Term.indexes.normal.red },
+            { Color.Term.indexes.normal.red, Color.Term.indexes.normal.red },
             { Color.Term.indexes.normal.cyan, Color.Term.indexes.normal.cyan },
         }) do
             it('Should brighten color ' .. v[1] .. ' to ' .. v[2], function()
@@ -63,17 +63,17 @@ describe('Gui', function()
         for _, v in ipairs({
             { 179, 243, 247 },
             { 221, 127, 215 },
-            { 4,   4,   6 },
+            { 4, 4, 6 },
             { 247, 241, 232 },
         }) do
             it(
                 'Should initialize R G B values correctly for color rgb('
-                .. v[1]
-                .. ', '
-                .. v[2]
-                .. ', '
-                .. v[3]
-                .. ')',
+                    .. v[1]
+                    .. ', '
+                    .. v[2]
+                    .. ', '
+                    .. v[3]
+                    .. ')',
                 function()
                     local color = Color.Gui.from_rgb(v[1], v[2], v[3])
                     local r, g, b = color:to_rgb()
@@ -83,24 +83,24 @@ describe('Gui', function()
         end
 
         for _, v in ipairs({
-            { { 274, 134, 95 },     { 255, 134, 95 } },
-            { { 214, 300, 252 },    { 214, 255, 252 } },
-            { { 215, 182, 1000 },   { 215, 182, 255 } },
-            { { 800, 900, 500 },    { 255, 255, 255 } },
+            { { 274, 134, 95 }, { 255, 134, 95 } },
+            { { 214, 300, 252 }, { 214, 255, 252 } },
+            { { 215, 182, 1000 }, { 215, 182, 255 } },
+            { { 800, 900, 500 }, { 255, 255, 255 } },
 
-            { { -274, 134, 95 },    { 0, 134, 95 } },
-            { { 214, -300, 252 },   { 214, 0, 252 } },
-            { { 215, 182, -1000 },  { 215, 182, 0 } },
+            { { -274, 134, 95 }, { 0, 134, 95 } },
+            { { 214, -300, 252 }, { 214, 0, 252 } },
+            { { 215, 182, -1000 }, { 215, 182, 0 } },
             { { -800, -900, -500 }, { 0, 0, 0 } },
         }) do
             it(
                 'Should cap R G B values to 0-255 for color rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ')',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ')',
                 function()
                     local initial = v[1]
                     local capped = v[2]
@@ -114,9 +114,9 @@ describe('Gui', function()
 
     describe('from_hsv', function()
         for _, v in ipairs({
-            { { 2, 92, 53 },   { 135, 14, 10 } },
-            { { 29, 21, 49 },  { 124, 111, 98 } },
-            { { 52, 71, 46 },  { 117, 106, 34 } },
+            { { 2, 92, 53 }, { 135, 14, 10 } },
+            { { 29, 21, 49 }, { 124, 111, 98 } },
+            { { 52, 71, 46 }, { 117, 106, 34 } },
             { { 143, 92, 57 }, { 11, 145, 62 } },
             { { 207, 67, 56 }, { 47, 99, 142 } },
             { { 267, 56, 93 }, { 164, 104, 237 } },
@@ -124,12 +124,12 @@ describe('Gui', function()
         }) do
             it(
                 'Should initialize R G B values correctly for color hsv('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ')',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ')',
                 function()
                     local hsv = v[1]
                     local rgb = v[2]
@@ -141,23 +141,23 @@ describe('Gui', function()
         end
 
         for _, v in ipairs({
-            { { 400, 92, 53 },      { 360, 92, 53 } },
-            { { 29, 120, 49 },      { 29, 100, 49 } },
-            { { 52, 71, 221 },      { 52, 71, 100 } },
-            { { 362, 500, 221 },    { 360, 100, 100 } },
-            { { -400, 92, 53 },     { 0, 92, 53 } },
-            { { 29, -120, 49 },     { 29, 0, 49 } },
-            { { 52, 71, -221 },     { 52, 71, 0 } },
+            { { 400, 92, 53 }, { 360, 92, 53 } },
+            { { 29, 120, 49 }, { 29, 100, 49 } },
+            { { 52, 71, 221 }, { 52, 71, 100 } },
+            { { 362, 500, 221 }, { 360, 100, 100 } },
+            { { -400, 92, 53 }, { 0, 92, 53 } },
+            { { 29, -120, 49 }, { 29, 0, 49 } },
+            { { 52, 71, -221 }, { 52, 71, 0 } },
             { { -362, -500, -221 }, { 0, 0, 0 } },
         }) do
             it(
                 'Should cap H S V values for color hsv('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ')',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ')',
                 function()
                     local initial = v[1]
                     local capped = v[2]
@@ -171,13 +171,13 @@ describe('Gui', function()
 
     describe('from_hex', function()
         for _, v in ipairs({
-            { '15c',     { 17, 85, 204 } },
-            { '#15c',    { 17, 85, 204 } },
-            { '15C',     { 17, 85, 204 } },
-            { '#15C',    { 17, 85, 204 } },
-            { 'e7ce36',  { 231, 206, 54 } },
+            { '15c', { 17, 85, 204 } },
+            { '#15c', { 17, 85, 204 } },
+            { '15C', { 17, 85, 204 } },
+            { '#15C', { 17, 85, 204 } },
+            { 'e7ce36', { 231, 206, 54 } },
             { '#e7ce36', { 231, 206, 54 } },
-            { 'E7CE36',  { 231, 206, 54 } },
+            { 'E7CE36', { 231, 206, 54 } },
             { '#E7CE36', { 231, 206, 54 } },
         }) do
             it('Should initialize R G B values correctly for color hex(' .. v[1] .. ')', function()
@@ -212,25 +212,25 @@ describe('Gui', function()
     describe('distance_squared', function()
         for _, v in ipairs({
             { { 104, 189, 135 }, { 104, 189, 135 }, 0 },
-            { { 0, 0, 0 },       { 255, 255, 255 }, 195075 },
-            { { 194, 63, 133 },  { 132, 41, 131 },  4332 },
-            { { 185, 54, 247 },  { 245, 223, 188 }, 35642 },
+            { { 0, 0, 0 }, { 255, 255, 255 }, 195075 },
+            { { 194, 63, 133 }, { 132, 41, 131 }, 4332 },
+            { { 185, 54, 247 }, { 245, 223, 188 }, 35642 },
         }) do
             it(
                 'Should compute correct distance for colors rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ')'
-                .. ' and rgb('
-                .. v[2][1]
-                .. ', '
-                .. v[2][2]
-                .. ', '
-                .. v[2][3]
-                .. ')',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ')'
+                    .. ' and rgb('
+                    .. v[2][1]
+                    .. ', '
+                    .. v[2][2]
+                    .. ', '
+                    .. v[2][3]
+                    .. ')',
                 function()
                     local color_1 = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local color_2 = Color.Gui.from_rgb(v[2][1], v[2][2], v[2][3])
@@ -251,29 +251,29 @@ describe('Gui', function()
 
     describe('blend', function()
         for _, v in ipairs({
-            { { 221, 117, 51 },  { 11, 14, 71 },    0.0,  { 221, 117, 51 } },
-            { { 221, 117, 51 },  { 11, 14, 71 },    1.0,  { 11, 14, 71 } },
-            { { 50, 38, 66 },    { 228, 139, 174 }, 0.3,  { 103, 68, 98 } },
-            { { 194, 188, 161 }, { 12, 85, 120 },   0.9,  { 30, 95, 124 } },
-            { { 39, 164, 240 },  { 28, 55, 3 },     -0.5, { 44, 218, 255 } },
-            { { 130, 147, 11 },  { 12, 58, 82 },    2.0,  { 0, 0, 153 } },
+            { { 221, 117, 51 }, { 11, 14, 71 }, 0.0, { 221, 117, 51 } },
+            { { 221, 117, 51 }, { 11, 14, 71 }, 1.0, { 11, 14, 71 } },
+            { { 50, 38, 66 }, { 228, 139, 174 }, 0.3, { 103, 68, 98 } },
+            { { 194, 188, 161 }, { 12, 85, 120 }, 0.9, { 30, 95, 124 } },
+            { { 39, 164, 240 }, { 28, 55, 3 }, -0.5, { 44, 218, 255 } },
+            { { 130, 147, 11 }, { 12, 58, 82 }, 2.0, { 0, 0, 153 } },
         }) do
             it(
                 'Should correctly blend colors rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ')'
-                .. ' and rgb('
-                .. v[2][1]
-                .. ', '
-                .. v[2][2]
-                .. ', '
-                .. v[2][3]
-                .. ') with factor '
-                .. v[3],
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ')'
+                    .. ' and rgb('
+                    .. v[2][1]
+                    .. ', '
+                    .. v[2][2]
+                    .. ', '
+                    .. v[2][3]
+                    .. ') with factor '
+                    .. v[3],
                 function()
                     local color_1 = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local color_2 = Color.Gui.from_rgb(v[2][1], v[2][2], v[2][3])
@@ -287,19 +287,19 @@ describe('Gui', function()
 
     describe('darken', function()
         for _, v in ipairs({
-            { { 241, 227, 24 },  0.0, { 241, 227, 24 } },
-            { { 160, 149, 34 },  0.2, { 128, 119, 27 } },
+            { { 241, 227, 24 }, 0.0, { 241, 227, 24 } },
+            { { 160, 149, 34 }, 0.2, { 128, 119, 27 } },
             { { 237, 250, 245 }, 1.0, { 0, 0, 0 } },
         }) do
             it(
                 'Should correctly darken color rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') with factor '
-                .. v[2],
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') with factor '
+                    .. v[2],
                 function()
                     local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local factor = v[2]
@@ -312,19 +312,19 @@ describe('Gui', function()
 
     describe('lighen', function()
         for _, v in ipairs({
-            { { 241, 227, 24 },  0.0, { 241, 227, 24 } },
-            { { 160, 149, 34 },  0.2, { 179, 170, 78 } },
+            { { 241, 227, 24 }, 0.0, { 241, 227, 24 } },
+            { { 160, 149, 34 }, 0.2, { 179, 170, 78 } },
             { { 237, 250, 245 }, 1.0, { 255, 255, 255 } },
         }) do
             it(
                 'Should correctly lighten color rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') with factor '
-                .. v[2],
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') with factor '
+                    .. v[2],
                 function()
                     local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local factor = v[2]
@@ -337,23 +337,23 @@ describe('Gui', function()
 
     describe('hue_rotate', function()
         for _, v in ipairs({
-            { { 73, 40, 48 }, 0,    { 73, 40, 48 } },
-            { { 55, 65, 38 }, 20,   { 75, 65, 38 } },
-            { { 131, 2, 45 }, -20,  { 110, 2, 45 } },
-            { { 320, 17, 8 }, 80,   { 40, 17, 8 } },
-            { { 320, 17, 8 }, 440,  { 40, 17, 8 } },
-            { { 2, 74, 89 },  -80,  { 282, 74, 89 } },
-            { { 2, 74, 89 },  -440, { 282, 74, 89 } },
+            { { 73, 40, 48 }, 0, { 73, 40, 48 } },
+            { { 55, 65, 38 }, 20, { 75, 65, 38 } },
+            { { 131, 2, 45 }, -20, { 110, 2, 45 } },
+            { { 320, 17, 8 }, 80, { 40, 17, 8 } },
+            { { 320, 17, 8 }, 440, { 40, 17, 8 } },
+            { { 2, 74, 89 }, -80, { 282, 74, 89 } },
+            { { 2, 74, 89 }, -440, { 282, 74, 89 } },
         }) do
             it(
                 'Should correctly hue rotate color hsv('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') by a amount '
-                .. v[2],
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') by a amount '
+                    .. v[2],
                 function()
                     local color = Color.Gui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
@@ -366,21 +366,21 @@ describe('Gui', function()
 
     describe('saturate', function()
         for _, v in ipairs({
-            { { 73, 40, 48 },  0,    { 73, 40, 48 } },
-            { { 55, 65, 38 },  20,   { 55, 85, 38 } },
-            { { 131, 76, 45 }, -20,  { 131, 56, 45 } },
-            { { 320, 17, 8 },  100,  { 320, 100, 8 } },
-            { { 2, 74, 89 },   -100, { 2, 0, 89 } },
+            { { 73, 40, 48 }, 0, { 73, 40, 48 } },
+            { { 55, 65, 38 }, 20, { 55, 85, 38 } },
+            { { 131, 76, 45 }, -20, { 131, 56, 45 } },
+            { { 320, 17, 8 }, 100, { 320, 100, 8 } },
+            { { 2, 74, 89 }, -100, { 2, 0, 89 } },
         }) do
             it(
                 'Should correctly saturate color hsv('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') by a amount '
-                .. v[2],
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') by a amount '
+                    .. v[2],
                 function()
                     local color = Color.Gui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
@@ -393,22 +393,22 @@ describe('Gui', function()
 
     describe('brighten', function()
         for _, v in ipairs({
-            { { 73, 40, 48 },  0,    { 73, 40, 48 } },
-            { { 55, 65, 38 },  20,   { 55, 65, 58 } },
-            { { 131, 76, 45 }, -20,  { 131, 76, 25 } },
+            { { 73, 40, 48 }, 0, { 73, 40, 48 } },
+            { { 55, 65, 38 }, 20, { 55, 65, 58 } },
+            { { 131, 76, 45 }, -20, { 131, 76, 25 } },
             -- TODO(Fix this test)
             -- { { 320, 17, 8 }, 100, { 320, 17, 100 } },
-            { { 2, 74, 89 },   -100, { 2, 74, 0 } },
+            { { 2, 74, 89 }, -100, { 2, 74, 0 } },
         }) do
             it(
                 'Should correctly brighten color hsv('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') by a amount '
-                .. v[2],
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') by a amount '
+                    .. v[2],
                 function()
                     local color = Color.Gui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
@@ -421,20 +421,20 @@ describe('Gui', function()
 
     describe('to_hex', function()
         for _, v in ipairs({
-            { { 30, 215, 28 },   '#1ED71C' },
-            { { 8, 2, 84 },      '#080254' },
-            { { 92, 35, 101 },   '#5C2365' },
+            { { 30, 215, 28 }, '#1ED71C' },
+            { { 8, 2, 84 }, '#080254' },
+            { { 92, 35, 101 }, '#5C2365' },
             { { 244, 238, 251 }, '#F4EEFB' },
-            { { 83, 43, 56 },    '#532B38' },
+            { { 83, 43, 56 }, '#532B38' },
         }) do
             it(
                 'Should correctly convert color rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') to hex',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') to hex',
                 function()
                     local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local hex = color:to_hex()
@@ -444,22 +444,22 @@ describe('Gui', function()
         end
 
         for _, v in ipairs({
-            { 65,  26,  20 },
-            { 182, 74,  45 },
+            { 65, 26, 20 },
+            { 182, 74, 45 },
             { 244, 222, 144 },
-            { 85,  239, 87 },
-            { 54,  66,  123 },
+            { 85, 239, 87 },
+            { 54, 66, 123 },
             { 188, 153, 215 },
             { 224, 174, 228 },
         }) do
             it(
                 'Should be the reverse of new_from_hex for color rgb('
-                .. v[1]
-                .. ', '
-                .. v[2]
-                .. ', '
-                .. v[3]
-                .. ')',
+                    .. v[1]
+                    .. ', '
+                    .. v[2]
+                    .. ', '
+                    .. v[3]
+                    .. ')',
                 function()
                     local original = Color.Gui.from_rgb(v[1], v[2], v[3])
                     local transformed = Color.Gui.from_hex(original:to_hex())
@@ -471,20 +471,20 @@ describe('Gui', function()
 
     describe('to_hsv', function()
         for _, v in ipairs({
-            { { 30, 215, 28 },   { 119, 87, 84 } },
-            { { 8, 2, 84 },      { 244, 98, 33 } },
-            { { 92, 35, 101 },   { 292, 65, 40 } },
+            { { 30, 215, 28 }, { 119, 87, 84 } },
+            { { 8, 2, 84 }, { 244, 98, 33 } },
+            { { 92, 35, 101 }, { 292, 65, 40 } },
             { { 244, 238, 251 }, { 268, 5, 98 } },
-            { { 83, 43, 56 },    { 341, 48, 33 } },
+            { { 83, 43, 56 }, { 341, 48, 33 } },
         }) do
             it(
                 'Should correctly convert color rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') to hsv',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') to hsv',
                 function()
                     local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local color_h, color_s, color_v = color:to_hsv()
@@ -497,22 +497,22 @@ describe('Gui', function()
         end
 
         for _, v in ipairs({
-            { 65,  26,  20 },
-            { 182, 74,  45 },
+            { 65, 26, 20 },
+            { 182, 74, 45 },
             { 244, 222, 144 },
-            { 85,  239, 87 },
-            { 54,  66,  123 },
+            { 85, 239, 87 },
+            { 54, 66, 123 },
             { 188, 153, 215 },
             { 224, 174, 228 },
         }) do
             it(
                 'Should be the reverse of new_from_hsv for color rgb('
-                .. v[1]
-                .. ', '
-                .. v[2]
-                .. ', '
-                .. v[3]
-                .. ')',
+                    .. v[1]
+                    .. ', '
+                    .. v[2]
+                    .. ', '
+                    .. v[3]
+                    .. ')',
                 function()
                     local original = Color.Gui.from_rgb(v[1], v[2], v[3])
                     local transformed = Color.Gui.from_hsv(original:to_hsv())
@@ -532,12 +532,12 @@ describe('Gui', function()
         }) do
             it(
                 'Should correctly convert color rgb('
-                .. v[1][1]
-                .. ', '
-                .. v[1][2]
-                .. ', '
-                .. v[1][3]
-                .. ') to rgb',
+                    .. v[1][1]
+                    .. ', '
+                    .. v[1][2]
+                    .. ', '
+                    .. v[1][3]
+                    .. ') to rgb',
                 function()
                     local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local r, g, b = color:to_rgb()
@@ -547,22 +547,22 @@ describe('Gui', function()
         end
 
         for _, v in ipairs({
-            { 65,  26,  20 },
-            { 182, 74,  45 },
+            { 65, 26, 20 },
+            { 182, 74, 45 },
             { 244, 222, 144 },
-            { 85,  239, 87 },
-            { 54,  66,  123 },
+            { 85, 239, 87 },
+            { 54, 66, 123 },
             { 188, 153, 215 },
             { 224, 174, 228 },
         }) do
             it(
                 'Should be the reverse of new_from_rgb for color rgb('
-                .. v[1]
-                .. ', '
-                .. v[2]
-                .. ', '
-                .. v[3]
-                .. ')',
+                    .. v[1]
+                    .. ', '
+                    .. v[2]
+                    .. ', '
+                    .. v[3]
+                    .. ')',
                 function()
                     local original = Color.Gui.from_rgb(v[1], v[2], v[3])
                     local transformed = Color.Gui.from_rgb(original:to_rgb())
