@@ -1,17 +1,17 @@
 ---@diagnostic disable: undefined-field -- For `assert` module
 
 local say = require('say')
-local ColorGui = require('highlight_builder.color')
+local Color = require('highlight_builder.color')
 
 ---@param _ unknown
----@param arguments {[1 | 2]: ColorGui}
+---@param arguments {[1 | 2]: Color.Gui}
 ---@return boolean
 local function color_equals(_, arguments)
     local color_1 = arguments[1]
     local color_2 = arguments[2]
 
-    local max_distance = ColorGui.from_rgb(0, 0, 0):distance_squared(ColorGui.from_rgb(2, 2, 2))
-    local distance = ColorGui.distance_squared(color_1, color_2)
+    local max_distance = Color.Gui.from_rgb(0, 0, 0):distance_squared(Color.Gui.from_rgb(2, 2, 2))
+    local distance = Color.Gui.distance_squared(color_1, color_2)
 
     return distance < max_distance
 end
@@ -26,7 +26,39 @@ assert:register(
     'assertion.color_equals.negative'
 )
 
-describe('ColorGui', function()
+describe('Term', function()
+    describe('brighten', function()
+        for _, v in ipairs({
+            { Color.Term.indexes.primary.bg, Color.Term.indexes.primary.bg },
+            { Color.Term.indexes.primary.fg, Color.Term.indexes.primary.fg },
+            { Color.Term.indexes.normal.green, Color.Term.indexes.bright.green },
+            { Color.Term.indexes.normal.magenta, Color.Term.indexes.bright.magenta },
+            { Color.Term.indexes.bright.green, Color.Term.indexes.bright.green },
+            { Color.Term.indexes.bright.magenta, Color.Term.indexes.bright.magenta },
+        }) do
+            it('Should brighten color ' .. v[1] .. ' to ' .. v[2], function()
+                assert.are.same(v[2], Color.Term.brighten(v[1]))
+            end)
+        end
+    end)
+
+    describe('darken', function()
+        for _, v in ipairs({
+            { Color.Term.indexes.primary.bg, Color.Term.indexes.primary.bg },
+            { Color.Term.indexes.primary.fg, Color.Term.indexes.primary.fg },
+            { Color.Term.indexes.bright.red, Color.Term.indexes.normal.red },
+            { Color.Term.indexes.bright.cyan, Color.Term.indexes.normal.cyan },
+            { Color.Term.indexes.normal.red, Color.Term.indexes.normal.red },
+            { Color.Term.indexes.normal.cyan, Color.Term.indexes.normal.cyan },
+        }) do
+            it('Should brighten color ' .. v[1] .. ' to ' .. v[2], function()
+                assert.are.same(v[2], Color.Term.darken(v[1]))
+            end)
+        end
+    end)
+end)
+
+describe('Gui', function()
     describe('from_rgb', function()
         for _, v in ipairs({
             { 179, 243, 247 },
@@ -43,7 +75,7 @@ describe('ColorGui', function()
                     .. v[3]
                     .. ')',
                 function()
-                    local color = ColorGui.from_rgb(v[1], v[2], v[3])
+                    local color = Color.Gui.from_rgb(v[1], v[2], v[3])
                     local r, g, b = color:to_rgb()
                     assert.are.same(v, { r, g, b })
                 end
@@ -72,7 +104,7 @@ describe('ColorGui', function()
                 function()
                     local initial = v[1]
                     local capped = v[2]
-                    local color = ColorGui.from_rgb(initial[1], initial[2], initial[3])
+                    local color = Color.Gui.from_rgb(initial[1], initial[2], initial[3])
                     local r, g, b = color:to_rgb()
                     assert.are.same(capped, { r, g, b })
                 end
@@ -101,7 +133,7 @@ describe('ColorGui', function()
                 function()
                     local hsv = v[1]
                     local rgb = v[2]
-                    local color = ColorGui.from_hsv(hsv[1], hsv[2], hsv[3])
+                    local color = Color.Gui.from_hsv(hsv[1], hsv[2], hsv[3])
                     local r, g, b = color:to_rgb()
                     assert.are.same(rgb, { r, g, b })
                 end
@@ -129,8 +161,8 @@ describe('ColorGui', function()
                 function()
                     local initial = v[1]
                     local capped = v[2]
-                    local color_initial = ColorGui.from_hsv(initial[1], initial[2], initial[3])
-                    local color_capped = ColorGui.from_hsv(capped[1], capped[2], capped[3])
+                    local color_initial = Color.Gui.from_hsv(initial[1], initial[2], initial[3])
+                    local color_capped = Color.Gui.from_hsv(capped[1], capped[2], capped[3])
                     assert.are.same(color_capped, color_initial)
                 end
             )
@@ -151,7 +183,7 @@ describe('ColorGui', function()
             it('Should initialize R G B values correctly for color hex(' .. v[1] .. ')', function()
                 local hex = v[1]
                 local rgb = v[2]
-                local color = ColorGui.from_hex(hex)
+                local color = Color.Gui.from_hex(hex)
                 local r, g, b = color:to_rgb()
                 assert.are.same(rgb, { r, g, b })
             end)
@@ -171,7 +203,7 @@ describe('ColorGui', function()
         }) do
             it('Should fail for invalid color hex(' .. v .. ')', function()
                 assert.has.errors(function()
-                    ColorGui.from_hex(v)
+                    Color.Gui.from_hex(v)
                 end)
             end)
         end
@@ -200,8 +232,8 @@ describe('ColorGui', function()
                     .. v[2][3]
                     .. ')',
                 function()
-                    local color_1 = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
-                    local color_2 = ColorGui.from_rgb(v[2][1], v[2][2], v[2][3])
+                    local color_1 = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color_2 = Color.Gui.from_rgb(v[2][1], v[2][2], v[2][3])
                     local distance = color_1:distance_squared(color_2)
                     assert.are.equal(v[3], distance)
                 end
@@ -209,8 +241,8 @@ describe('ColorGui', function()
         end
 
         it('Should be commutative', function()
-            local color_1 = ColorGui.from_rgb(104, 213, 69)
-            local color_2 = ColorGui.from_rgb(211, 204, 197)
+            local color_1 = Color.Gui.from_rgb(104, 213, 69)
+            local color_2 = Color.Gui.from_rgb(211, 204, 197)
             local distance_1 = color_1:distance_squared(color_2)
             local distance_2 = color_2:distance_squared(color_1)
             assert.are.equal(distance_1, distance_2)
@@ -243,11 +275,11 @@ describe('ColorGui', function()
                     .. ') with factor '
                     .. v[3],
                 function()
-                    local color_1 = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
-                    local color_2 = ColorGui.from_rgb(v[2][1], v[2][2], v[2][3])
+                    local color_1 = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color_2 = Color.Gui.from_rgb(v[2][1], v[2][2], v[2][3])
                     local factor = v[3]
                     local blended = color_1:blend(color_2, factor)
-                    assert.are.same(ColorGui.from_rgb(v[4][1], v[4][2], v[4][3]), blended)
+                    assert.are.same(Color.Gui.from_rgb(v[4][1], v[4][2], v[4][3]), blended)
                 end
             )
         end
@@ -269,10 +301,10 @@ describe('ColorGui', function()
                     .. ') with factor '
                     .. v[2],
                 function()
-                    local color = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local factor = v[2]
                     local lightened = color:darken(factor)
-                    assert.are.same(ColorGui.from_rgb(v[3][1], v[3][2], v[3][3]), lightened)
+                    assert.are.same(Color.Gui.from_rgb(v[3][1], v[3][2], v[3][3]), lightened)
                 end
             )
         end
@@ -294,10 +326,10 @@ describe('ColorGui', function()
                     .. ') with factor '
                     .. v[2],
                 function()
-                    local color = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local factor = v[2]
                     local lightened = color:lighten(factor)
-                    assert.are.same(ColorGui.from_rgb(v[3][1], v[3][2], v[3][3]), lightened)
+                    assert.are.same(Color.Gui.from_rgb(v[3][1], v[3][2], v[3][3]), lightened)
                 end
             )
         end
@@ -323,10 +355,10 @@ describe('ColorGui', function()
                     .. ') by a amount '
                     .. v[2],
                 function()
-                    local color = ColorGui.from_hsv(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
                     local hue_rotated = color:hue_rotate(amount)
-                    assert.color_equals(ColorGui.from_hsv(v[3][1], v[3][2], v[3][3]), hue_rotated)
+                    assert.color_equals(Color.Gui.from_hsv(v[3][1], v[3][2], v[3][3]), hue_rotated)
                 end
             )
         end
@@ -350,10 +382,10 @@ describe('ColorGui', function()
                     .. ') by a amount '
                     .. v[2],
                 function()
-                    local color = ColorGui.from_hsv(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
                     local saturated = color:saturate(amount)
-                    assert.color_equals(ColorGui.from_hsv(v[3][1], v[3][2], v[3][3]), saturated)
+                    assert.color_equals(Color.Gui.from_hsv(v[3][1], v[3][2], v[3][3]), saturated)
                 end
             )
         end
@@ -378,10 +410,10 @@ describe('ColorGui', function()
                     .. ') by a amount '
                     .. v[2],
                 function()
-                    local color = ColorGui.from_hsv(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_hsv(v[1][1], v[1][2], v[1][3])
                     local amount = v[2]
                     local saturated = color:brighten(amount)
-                    assert.color_equals(ColorGui.from_hsv(v[3][1], v[3][2], v[3][3]), saturated)
+                    assert.color_equals(Color.Gui.from_hsv(v[3][1], v[3][2], v[3][3]), saturated)
                 end
             )
         end
@@ -404,7 +436,7 @@ describe('ColorGui', function()
                     .. v[1][3]
                     .. ') to hex',
                 function()
-                    local color = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local hex = color:to_hex()
                     assert.are.same(v[2], hex)
                 end
@@ -429,8 +461,8 @@ describe('ColorGui', function()
                     .. v[3]
                     .. ')',
                 function()
-                    local original = ColorGui.from_rgb(v[1], v[2], v[3])
-                    local transformed = ColorGui.from_hex(original:to_hex())
+                    local original = Color.Gui.from_rgb(v[1], v[2], v[3])
+                    local transformed = Color.Gui.from_hex(original:to_hex())
                     assert.are.same(original, transformed)
                 end
             )
@@ -454,7 +486,7 @@ describe('ColorGui', function()
                     .. v[1][3]
                     .. ') to hsv',
                 function()
-                    local color = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local color_h, color_s, color_v = color:to_hsv()
                     assert.are.same(
                         { h = v[2][1], s = v[2][2], v = v[2][3] },
@@ -482,8 +514,8 @@ describe('ColorGui', function()
                     .. v[3]
                     .. ')',
                 function()
-                    local original = ColorGui.from_rgb(v[1], v[2], v[3])
-                    local transformed = ColorGui.from_hsv(original:to_hsv())
+                    local original = Color.Gui.from_rgb(v[1], v[2], v[3])
+                    local transformed = Color.Gui.from_hsv(original:to_hsv())
                     assert.color_equals(original, transformed)
                 end
             )
@@ -507,7 +539,7 @@ describe('ColorGui', function()
                     .. v[1][3]
                     .. ') to rgb',
                 function()
-                    local color = ColorGui.from_rgb(v[1][1], v[1][2], v[1][3])
+                    local color = Color.Gui.from_rgb(v[1][1], v[1][2], v[1][3])
                     local r, g, b = color:to_rgb()
                     assert.are.same({ v[1][1], v[1][2], v[1][3] }, { r, g, b })
                 end
@@ -532,8 +564,8 @@ describe('ColorGui', function()
                     .. v[3]
                     .. ')',
                 function()
-                    local original = ColorGui.from_rgb(v[1], v[2], v[3])
-                    local transformed = ColorGui.from_rgb(original:to_rgb())
+                    local original = Color.Gui.from_rgb(v[1], v[2], v[3])
+                    local transformed = Color.Gui.from_rgb(original:to_rgb())
                     assert.color_equals(original, transformed)
                 end
             )

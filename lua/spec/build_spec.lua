@@ -1,23 +1,23 @@
 ---@diagnostic disable: undefined-field -- For `assert` module
 
 local build = require('highlight_builder.build')
-local ColorGui = require('highlight_builder.color')
+local Color = require('highlight_builder.color')
 
 ---@type Palette
 local palette = {
     primary = {
-        fg = ColorGui.from_hex('#FFF'),
-        bg = ColorGui.from_hex('#000'),
+        fg = Color.Gui.from_hex('#FFF'),
+        bg = Color.Gui.from_hex('#000'),
     },
     indexed = {
-        ColorGui.from_hex('#111'),
-        ColorGui.from_hex('#A00'),
-        ColorGui.from_hex('#0A0'),
-        ColorGui.from_hex('#AA0'),
-        ColorGui.from_hex('#00A'),
-        ColorGui.from_hex('#A0A'),
-        ColorGui.from_hex('#0AA'),
-        ColorGui.from_hex('#AAA'),
+        Color.Gui.from_hex('#111'),
+        Color.Gui.from_hex('#A00'),
+        Color.Gui.from_hex('#0A0'),
+        Color.Gui.from_hex('#AA0'),
+        Color.Gui.from_hex('#00A'),
+        Color.Gui.from_hex('#A0A'),
+        Color.Gui.from_hex('#0AA'),
+        Color.Gui.from_hex('#AAA'),
     },
 }
 
@@ -92,7 +92,7 @@ describe('build', function()
                 local highlight = {
                     gui = {
                         bg = nil,
-                        fg = ColorGui.from_hex('#456'),
+                        fg = Color.Gui.from_hex('#456'),
                         style = {
                             undercurl = true,
                             inverse = true,
@@ -107,6 +107,13 @@ describe('build', function()
                             bold = false,
                         },
                     },
+                    tty = {
+                        bg = 3,
+                        fg = 1,
+                        style = {
+                            bold = true,
+                        },
+                    },
                 }
                 set('Get', highlight)
                 assert.are.same(highlight, get('Get'))
@@ -119,7 +126,7 @@ describe('build', function()
                 local highlight = {
                     gui = {
                         bg = nil,
-                        fg = ColorGui.from_hex('#009'),
+                        fg = Color.Gui.from_hex('#009'),
                         style = {
                             undercurl = true,
                             inverse = true,
@@ -130,6 +137,14 @@ describe('build', function()
                 assert.are.same(
                     vim.tbl_deep_extend('force', highlight, {
                         term = {
+                            bg = nil,
+                            fg = 4,
+                            style = {
+                                undercurl = true,
+                                inverse = true,
+                            },
+                        },
+                        tty = {
                             bg = nil,
                             fg = 4,
                             style = {

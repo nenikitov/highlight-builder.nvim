@@ -1,6 +1,6 @@
 ---@class Palette
----@field primary { fg: ColorGui, bg: ColorGui }
----@field indexed ColorGui[]
+---@field primary { fg: Color.Gui, bg: Color.Gui }
+---@field indexed Color.Gui[]
 
 return {
     custom = require('highlight_builder.palette.custom'),
