@@ -79,8 +79,9 @@ Color.Term.indexes = {
     },
 }
 
----Get a brighter version of the terminal color.
+--- Get a brighter version of the terminal color.
 ---@param color Term16
+---@return Term16 brightened
 function Color.Term.brighten(color)
     if color == 'NONE' or (color + 8) > 16 then
         return color
@@ -89,14 +90,22 @@ function Color.Term.brighten(color)
     return color + 8
 end
 
----Get a darker version of the terminal color.
+--- Get a darker version of the terminal color.
 ---@param color Term16
+---@return Term16 darkened
 function Color.Term.darken(color)
     if color == 'NONE' or (color - 8) < 0 then
         return color
     end
 
     return color - 8
+end
+
+--- Get an index from looking up an indexed color.
+---@param color Term256
+---@return integer lookup
+function Color.Term.lookup(color)
+    return color + 1
 end
 
 --#endregion
