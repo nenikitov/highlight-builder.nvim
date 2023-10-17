@@ -141,7 +141,7 @@ describe('HighlightSetting', function()
                         },
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }):complete(palette)
@@ -160,7 +160,7 @@ describe('HighlightSetting', function()
                         },
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }, highlight)
@@ -260,24 +260,24 @@ describe('HighlightSetting', function()
                     local highlight = HighlightSetting.new({
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }):complete(palette)
                     assert.are.same({
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         gui = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         term = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }, highlight)
@@ -373,7 +373,7 @@ describe('HighlightSetting', function()
                         },
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }):complete(palette)
@@ -392,7 +392,7 @@ describe('HighlightSetting', function()
                         },
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }, highlight)
@@ -492,24 +492,24 @@ describe('HighlightSetting', function()
                     local highlight = HighlightSetting.new({
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }):complete(palette)
                     assert.are.same({
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         term = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         gui = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }, highlight)
@@ -605,7 +605,7 @@ describe('HighlightSetting', function()
                         },
                         gui = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }):complete(palette)
@@ -624,7 +624,7 @@ describe('HighlightSetting', function()
                         },
                         gui = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }, highlight)
@@ -724,24 +724,24 @@ describe('HighlightSetting', function()
                     local highlight = HighlightSetting.new({
                         gui = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }):complete(palette)
                     assert.are.same({
                         tty = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         term = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         gui = {
                             style = {
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }, highlight)
@@ -855,7 +855,7 @@ describe('HighlightSetting', function()
                         bg = '#FAB',
                         sp = '#789',
                         style = {
-                            inverse = true,
+                            reverse = true,
                         },
                     },
                 }):compile(palette, false)
@@ -867,7 +867,7 @@ describe('HighlightSetting', function()
                     fg = '#112233',
                     bg = '#FFAABB',
                     sp = '#778899',
-                    inverse = true,
+                    reverse = true,
                 }, highlight)
             end)
 
@@ -889,7 +889,7 @@ describe('HighlightSetting', function()
                         bg = '#FAB',
                         sp = '#789',
                         style = {
-                            inverse = true,
+                            reverse = true,
                         },
                     },
                 }):compile(palette, true)
@@ -899,7 +899,7 @@ describe('HighlightSetting', function()
                     fg = '#112233',
                     bg = '#FFAABB',
                     sp = '#778899',
-                    inverse = true,
+                    reverse = true,
                 }, highlight)
             end)
         end)

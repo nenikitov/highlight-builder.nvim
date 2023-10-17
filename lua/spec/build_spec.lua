@@ -95,7 +95,7 @@ describe('build', function()
                         fg = Color.Gui.from_hex('#456'),
                         style = {
                             undercurl = true,
-                            inverse = true,
+                            reverse = true,
                         },
                     },
                     term = {
@@ -129,7 +129,7 @@ describe('build', function()
                         fg = Color.Gui.from_hex('#009'),
                         style = {
                             undercurl = true,
-                            inverse = true,
+                            reverse = true,
                         },
                     },
                 }
@@ -141,7 +141,7 @@ describe('build', function()
                             fg = 4,
                             style = {
                                 undercurl = true,
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                         tty = {
@@ -149,7 +149,7 @@ describe('build', function()
                             fg = 4,
                             style = {
                                 undercurl = true,
-                                inverse = true,
+                                reverse = true,
                             },
                         },
                     }),

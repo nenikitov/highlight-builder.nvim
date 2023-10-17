@@ -2,7 +2,7 @@ local Color = {}
 
 --#region Term
 
----@alias Term8
+---@alias TermLow8
 ---| 'NONE' Default foreground / background color
 ---| 0 Black
 ---| 1 Red
@@ -13,24 +13,18 @@ local Color = {}
 ---| 6 Cyan
 ---| 7 White
 
----@alias Term16
+---@alias TermHigh8
 ---| 'NONE' Default foreground / background color
----| 0 Dark black
----| 1 Dark red
----| 2 Dark green
----| 3 Dark yellow
----| 4 Dark blue
----| 5 Dark magenta
----| 6 Dark cyan
----| 7 Dark white
----| 8 Light black
----| 9 Red
----| 10 Green
----| 11 Yellow
----| 12 Blue
----| 13 Magenta
----| 14 Cyan
----| 15 White
+---| 8 Bright Black
+---| 9 Bright Red
+---| 10 Bright Green
+---| 11 Bright Yellow
+---| 12 Bright Blue
+---| 13 Bright Magenta
+---| 14 Bright Cyan
+---| 15 Bright White
+
+---@alias Term16 TermLow8 | TermHigh8
 
 ---@alias Term256
 ---| Term16
@@ -81,9 +75,10 @@ Color.Term.indexes = {
 
 --- Get a brighter version of the terminal color.
 ---@param color Term16
----@return Term16 brightened
+---@return TermHigh8 brightened
 function Color.Term.brighten(color)
     if color == 'NONE' or (color + 8) > 16 then
+        ---@cast color TermHigh8
         return color
     end
 
@@ -92,9 +87,10 @@ end
 
 --- Get a darker version of the terminal color.
 ---@param color Term16
----@return Term16 darkened
+---@return TermLow8 darkened
 function Color.Term.darken(color)
     if color == 'NONE' or (color - 8) < 0 then
+        ---@cast color TermLow8
         return color
     end
 

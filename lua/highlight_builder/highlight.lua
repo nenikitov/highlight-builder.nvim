@@ -5,7 +5,7 @@ local Tty = require('highlight_builder.tty')
 
 ---@class TextStyleTty
 ---@field bold boolean? Bolden.
----@field inverse boolean? Inverse background and foreground colors.
+---@field reverse boolean? Inverse background and foreground colors.
 ---@field nocombine boolean? Whether to fully overwrite `TextStyle` properties or to add them.
 
 ---@class TextStyle: TextStyleTty Text style modifications.
@@ -45,7 +45,7 @@ local Tty = require('highlight_builder.tty')
 
 ---@class HighlightSettingTty Highlight properties for tty.
 ---@field fg Term16? Foreground color.
----@field bg Term8? Background color.
+---@field bg TermLow8? Background color.
 ---@field style TextStyleTty? Text style.
 
 ---@class HighlightSettingGuiInput Style Highlight properties for GUI interfaces.
@@ -59,7 +59,7 @@ local Tty = require('highlight_builder.tty')
 ---@field term HighlightSettingTerm? 256-color terminal properties.
 ---@field tty HighlightSettingTty? 8 or 16-color terminal properties.
 
----@alias HighlightInput HighlightSettingDefinitionInput | HighlightLinkCompiled | nil
+---@alias HighlightInput HighlightSettingDefinitionInput | HighlightLinkCompiled | HighlightSetting | nil
 
 --#endregion
 

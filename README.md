@@ -78,7 +78,7 @@ local highlight = {
             --- Strikethrough  - boolean
             strikethrough = false,
             --- Inverse foreground and background colors  - boolean
-            inverse = false,
+            reverse = false,
             --- Italicize - boolean
             italic = false,
             --- Fully overwrite the style instead of appending to it - boolean
@@ -103,7 +103,7 @@ local highlight = {
         --- Various font options - Subset of `gui.style`
         style = {
             bold = false,
-            inverse = false,
+            reverse = false,
             nocombine = false,
         },
     },
