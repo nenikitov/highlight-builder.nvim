@@ -210,7 +210,7 @@ function HighlightSetting:compile(palette, force_tty)
     end
 
     if force_tty == nil then
-        force_tty = Tty.is_gui()
+        force_tty = not Tty.is_gui()
     end
 
     local term = force_tty and completed.tty or completed.term
