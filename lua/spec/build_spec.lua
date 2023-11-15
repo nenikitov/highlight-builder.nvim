@@ -102,10 +102,13 @@ describe('build', function()
                     },
                     false,
                 },
-                Deferred = {{
-                    ctermfg = 5,
-                    fg = '#AA00AA',
-                }, true}
+                Deferred = {
+                    {
+                        ctermfg = 5,
+                        fg = '#AA00AA',
+                    },
+                    true,
+                },
             }, scheme)
         end)
     end)
