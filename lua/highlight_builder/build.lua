@@ -1,25 +1,25 @@
 local HighlightSetting = require('highlight_builder.highlight')
 
----@alias Set fun(name: string, highlight: HighlightInput)
+---@alias HighlightSettingWithDefer {[1]: HighlightSetting, [2]: boolean }
 ---@alias Get fun(name: string): HighlightSetting
+---@alias Set fun(name: string, highlight: HighlightInput, defer: true | nil)
 ---@param palette Palette
 ---@param builder fun(get: Get, set: Set)
----@return {[string]: table}
+---@return {[string]: {[1]: HighlightCompiled, [2]: boolean }}
 return function(palette, builder)
-    ---@type HighlightSetting[]
+    ---@type HighlightSettingWithDefer[]
     local highlights = {}
 
     builder(function(name)
-        highlights[name] = highlights[name]
-        return highlights[name]
-    end, function(name, highlight)
-        highlights[name] = HighlightSetting.new(highlight):complete(palette)
+        return highlights[name][1]
+    end, function(name, highlight, defer)
+        highlights[name] = { HighlightSetting.new(highlight):complete(palette), defer or false }
     end)
 
     return vim.tbl_map(
-        ---@param h HighlightSetting
+        ---@param h HighlightSettingWithDefer
         function(h)
-            return h:compile(palette)
+            return { h[1]:compile(palette), h[2] }
         end,
         highlights
     )

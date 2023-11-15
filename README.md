@@ -29,6 +29,7 @@ Utility plugin to create Neovim colorschemes that work both in truecolor, 256, a
 
 ```lua
 -- Import
+local apply = require('highlight_builder').apply
 local build = require('highlight_builder').build
 local Color = require('highlight_builder').Color
 local palette = require('highlight_builder').palette
@@ -42,10 +43,8 @@ local scheme = bulid(palette.default(256), function(get, set)
     -- ...
 end)
 
--- Apply
-for k, v in pairs(scheme) do
-    vim.nvim_set_hl(0, k, v)
-end
+-- Apply using a built-in helper
+apply(scheme)
 ```
 
 ### Highlight structure
@@ -173,6 +172,14 @@ local highlight = {
             style = {},
         },
     })
+    ```
+- Has an optional parameter to defer the creation of the highlight after the plugins have loaded
+    ```lua
+    -- Instant
+    set('Highlight', { --[[ ...]] })
+
+    -- Defered
+    set('Highlight', { --[[ ...]] }, true)
     ```
 
 ### `get` function
