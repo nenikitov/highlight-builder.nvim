@@ -10,10 +10,9 @@ local function apply(highlights, delay_deferred)
             vim.api.nvim_set_hl(0, name, highlight[1])
         end
 
+        apply_current()
         if highlight[2] then
             vim.defer_fn(apply_current, delay_deferred)
-        else
-            apply_current()
         end
     end
 end
