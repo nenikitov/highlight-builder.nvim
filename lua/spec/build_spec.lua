@@ -56,35 +56,60 @@ describe('build', function()
                 set('Link', {
                     link = 'Both',
                 })
+                set('Deferred', {
+                    tty = {
+                        fg = 5,
+                    },
+                }, true)
             end)
             assert.are.same({
                 OnlyTerm = {
-                    ctermfg = 3,
-                    fg = '#AAAA00',
+                    {
+                        ctermfg = 3,
+                        fg = '#AAAA00',
+                    },
+                    false,
                 },
                 OnlyGui = {
-                    ctermfg = 2,
-                    cterm = {
+                    {
+                        ctermfg = 2,
+                        cterm = {
+                            bold = true,
+                        },
+                        fg = '#00AB00',
                         bold = true,
                     },
-                    fg = '#00AB00',
-                    bold = true,
+                    false,
                 },
-                Nothing = {},
+                Nothing = {
+                    {},
+                    false,
+                },
                 Both = {
-                    ctermfg = 1,
-                    cterm = {
-                        bold = true,
+                    {
+                        ctermfg = 1,
+                        cterm = {
+                            bold = true,
+                        },
+                        bg = '#FFFFFF',
+                        underline = true,
                     },
-                    bg = '#FFFFFF',
-                    underline = true,
+                    false,
                 },
                 Link = {
-                    link = 'Both',
+                    {
+                        link = 'Both',
+                    },
+                    false,
                 },
+                Deferred = {{
+                    ctermfg = 5,
+                    fg = '#AA00AA',
+                }, true}
             }, scheme)
         end)
     end)
+
     describe('get', function()
         it('Should get from highlight', function()
             build(palette, function(get, set)
@@ -155,6 +180,48 @@ describe('build', function()
                     }),
                     get('Get')
                 )
+            end)
+        end)
+
+        it('Should not traverse links if not set to `traverse`', function()
+            build(palette, function(get, set)
+                ---@type HighlightInput
+                local highlight = {
+                    gui = {
+                        fg = Color.Gui.from_hex('#456'),
+                    },
+                    term = {
+                        fg = 80,
+                    },
+                    tty = {
+                        fg = 1,
+                    },
+                }
+                set('Get', highlight)
+                set('Link', { link = 'Get' })
+                set('Recursive', { link = 'Link' })
+                assert.are.same({ link = 'Link' }, get('Recursive'))
+            end)
+        end)
+
+        it('Should traverse links if set to `traverse`', function()
+            build(palette, function(get, set)
+                ---@type HighlightInput
+                local highlight = {
+                    gui = {
+                        fg = Color.Gui.from_hex('#456'),
+                    },
+                    term = {
+                        fg = 80,
+                    },
+                    tty = {
+                        fg = 1,
+                    },
+                }
+                set('Get', highlight)
+                set('Link', { link = 'Get' })
+                set('Recursive', { link = 'Link' })
+                assert.are.same(highlight, get('Recursive', true))
             end)
         end)
     end)
